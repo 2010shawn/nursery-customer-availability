@@ -12,7 +12,7 @@
 .row:first-of-type{border-top:0}
 .row>div{padding:10px 12px}
 .facilityPhotos{display:flex;gap:8px;justify-content:center;align-items:center;min-height:78px;background:#fff}.row>div:nth-child(2){border-left:1px solid #dfe3dc}.row>div:nth-child(3),.row>div:nth-child(4),.row>div:nth-child(5),.row>div:nth-child(6){border-left:2px solid var(--awg-line)}.row:nth-child(even) .facilityPhotos,.row:nth-child(even)>div:first-child,.row:nth-child(even)>div:nth-child(2){background:#faf8f0}
-.bot{font-weight:800;color:var(--awg-green-dark)}.common{font-size:13px;color:#6a766d}.qty{font-size:20px;font-weight:850}.size{display:inline-block;margin-top:8px;padding:4px 9px;background:#f1e1d8;color:#7d3d29;border:1px solid #d7b4a5;border-radius:999px;font-size:12px;font-weight:700}.hidden{display:none!important}.thumbs{display:flex;gap:8px;align-items:center;justify-content:center}.thumbWrap{display:flex;align-items:center}.thumbLabel{display:none}.thumbBtn{border:0;background:transparent;padding:0;cursor:pointer}.thumb{width:68px;height:52px;object-fit:cover;border-radius:9px;border:1px solid #cfd6cd;display:block}.noPhoto{font-size:11px;color:#7a847c;width:68px;text-align:center}.modal{position:fixed;inset:0;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;padding:24px;z-index:50}.modal[hidden]{display:none}.modalBox{position:relative;max-width:min(920px,95vw);max-height:92vh}.modal img{display:block;max-width:95vw;max-height:88vh;border-radius:14px;background:#fff}.closeModal{position:absolute;right:-10px;top:-10px;width:38px;height:38px;border:0;border-radius:999px;background:#fff;font-size:24px;line-height:1;cursor:pointer;box-shadow:0 3px 14px rgba(0,0,0,.25)}.empty{padding:30px;text-align:center;color:#657067}@media(max-width:650px){.tools{grid-template-columns:1fr}.availabilityGrid{--availability-cols:220px 110px repeat(4,162px);min-width:980px}.stickyBrandBar{min-height:58px;padding:6px 12px}.stickyBrandBar img{height:43px;max-width:245px}.stickyBrandText{font-size:11px}.thumb{width:58px;height:46px}.noPhoto{width:58px}}
+.bot{font-weight:800;color:var(--awg-green-dark)}.bot.featuredName{position:relative;display:inline-block;cursor:default;border-bottom:1px dotted var(--awg-rust)}.featuredPreview{position:fixed;z-index:70;width:250px;padding:7px;background:#fff;border:1px solid var(--awg-line);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.28);pointer-events:none}.featuredPreview[hidden]{display:none}.featuredPreview img{display:block;width:100%;max-height:310px;object-fit:contain;border-radius:8px}.featuredPreviewLabel{padding:6px 3px 1px;font-size:12px;font-weight:750;color:var(--awg-green-dark)}.common{font-size:13px;color:#6a766d}.qty{font-size:20px;font-weight:850}.size{display:inline-block;margin-top:8px;padding:4px 9px;background:#f1e1d8;color:#7d3d29;border:1px solid #d7b4a5;border-radius:999px;font-size:12px;font-weight:700}.hidden{display:none!important}.thumbs{display:flex;gap:8px;align-items:center;justify-content:center}.thumbWrap{display:flex;align-items:center}.thumbLabel{display:none}.thumbBtn{border:0;background:transparent;padding:0;cursor:pointer}.thumb{width:68px;height:52px;object-fit:cover;border-radius:9px;border:1px solid #cfd6cd;display:block}.noPhoto{font-size:11px;color:#7a847c;width:68px;text-align:center}.modal{position:fixed;inset:0;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;padding:24px;z-index:50}.modal[hidden]{display:none}.modalBox{position:relative;max-width:min(920px,95vw);max-height:92vh}.modal img{display:block;max-width:95vw;max-height:88vh;border-radius:14px;background:#fff}.closeModal{position:absolute;right:-10px;top:-10px;width:38px;height:38px;border:0;border-radius:999px;background:#fff;font-size:24px;line-height:1;cursor:pointer;box-shadow:0 3px 14px rgba(0,0,0,.25)}.empty{padding:30px;text-align:center;color:#657067}@media(max-width:650px){.tools{grid-template-columns:1fr}.availabilityGrid{--availability-cols:220px 110px repeat(4,162px);min-width:980px}.stickyBrandBar{min-height:58px;padding:6px 12px}.stickyBrandBar img{height:43px;max-width:245px}.stickyBrandText{font-size:11px}.thumb{width:58px;height:46px}.noPhoto{width:58px}}
 </style></head><body><div class="wrap"><section class="hero"><div class="eyebrow">Arizona Wholesale Growers</div><h1>Current Plant Availability</h1><div id="monthLabel" class="sub">Loading published availability…</div><p class="sub">Current plant availability across our growing facilities. Availability is subject to prior sale and confirmation.</p></section>
 <div class="tools"><input id="search" placeholder="Search botanical or common name"><select id="size"><option value="">All sizes</option></select></div><div id="status" class="status"></div><div class="availabilityShell">
       <div class="availabilityGrid">
@@ -32,9 +32,9 @@
         </div>
         <div id="list"></div>
       </div>
-    </div><div id="photoModal" class="modal" hidden><div class="modalBox"><button id="closeModal" class="closeModal" aria-label="Close photo">×</button><img id="modalImage" alt=""></div></div></div>
+    </div><div id="featuredPreview" class="featuredPreview" hidden><img id="featuredPreviewImage" alt=""><div id="featuredPreviewLabel" class="featuredPreviewLabel"></div></div><div id="photoModal" class="modal" hidden><div class="modalBox"><button id="closeModal" class="closeModal" aria-label="Close photo">×</button><img id="modalImage" alt=""></div></div></div>
 <script>
-const SUPABASE='https://yaobdnvvkfyzbsvrnxgf.supabase.co';const KEY='sb_publishable_niMYCWNf10L9x0iNMJ4ADw_jwrhdFkP';let rows=[];
+const SUPABASE='https://yaobdnvvkfyzbsvrnxgf.supabase.co';const KEY='sb_publishable_niMYCWNf10L9x0iNMJ4ADw_jwrhdFkP';let rows=[],featuredPhotos=new Map();
 async function api(path,options={}){const h={apikey:KEY,Authorization:'Bearer '+KEY,...(options.headers||{})};const r=await fetch(SUPABASE+path,{...options,headers:h});if(!r.ok)throw new Error(await r.text());return r.json()}
 function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 async function signed(path){if(!path)return '';try{const r=await api('/storage/v1/object/sign/inventory-photos/'+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({expiresIn:3600})});const p=r.signedURL||r.signedUrl;return p?(p.startsWith('http')?p:SUPABASE+(p.startsWith('/storage/v1')?'':'/storage/v1')+p):''}catch(e){console.warn('Photo unavailable',path,e);return ''}}
@@ -49,6 +49,26 @@ function groupListings(data){
   });
   return [...map.values()].sort((a,b)=>a.botanical_name.localeCompare(b.botanical_name)||a.container_size.localeCompare(b.container_size));
 }
+function listingKey(v){return [v.botanical_name||'',v.common_name||'',v.container_size||''].join('||')}
+async function loadFeaturedPhotos(month){
+  featuredPhotos=new Map();
+  try{
+    const data=await api('/rest/v1/featured_inventory_photos?select=*&inventory_month=eq.'+encodeURIComponent(month));
+    for(const f of data||[])featuredPhotos.set(listingKey(f),f);
+  }catch(e){console.warn('Featured photos unavailable',e)}
+}
+function hideFeaturedPreview(){const p=document.querySelector('#featuredPreview');p.hidden=true;document.querySelector('#featuredPreviewImage').src=''}
+async function showFeaturedPreview(el,item){
+  const f=featuredPhotos.get(listingKey(item));if(!f||!f.individual_photo_path)return;
+  const url=await signed(f.individual_photo_path);if(!url)return;
+  const preview=document.querySelector('#featuredPreview'),img=document.querySelector('#featuredPreviewImage'),label=document.querySelector('#featuredPreviewLabel');
+  img.src=url;img.alt=(item.common_name||item.botanical_name)+' featured individual plant';label.textContent=(item.common_name||item.botanical_name)+' · '+item.container_size;
+  preview.hidden=false;
+  const r=el.getBoundingClientRect(),pw=250,ph=345,margin=12;
+  let left=r.right+10;if(left+pw>window.innerWidth-margin)left=Math.max(margin,r.left-pw-10);
+  let top=Math.max(margin,Math.min(window.innerHeight-ph-margin,r.top-20));
+  preview.style.left=left+'px';preview.style.top=top+'px';
+}
 async function render(){
   const data=groupListings(filtered()),list=document.querySelector('#list');
   list.innerHTML='';
@@ -57,7 +77,15 @@ async function render(){
   for(const item of data){
     const d=document.createElement('div');d.className='row';
     const plant=document.createElement('div');
-    plant.innerHTML=`<div class="bot">${esc(item.botanical_name)}</div><div class="common">${esc(item.common_name)}</div>`;
+    const featured=featuredPhotos.get(listingKey(item));
+    plant.innerHTML=`<div class="bot${featured?' featuredName':''}" ${featured?'tabindex="0"':''}>${esc(item.botanical_name)}</div><div class="common">${esc(item.common_name)}</div>`;
+    if(featured){
+      const nameEl=plant.querySelector('.featuredName');
+      nameEl.addEventListener('mouseenter',()=>showFeaturedPreview(nameEl,item));
+      nameEl.addEventListener('mouseleave',hideFeaturedPreview);
+      nameEl.addEventListener('focus',()=>showFeaturedPreview(nameEl,item));
+      nameEl.addEventListener('blur',hideFeaturedPreview);
+    }
     const size=document.createElement('div');
     size.innerHTML=`<span class="size">${esc(item.container_size)}</span>`;
     d.appendChild(plant);d.appendChild(size);
@@ -99,6 +127,6 @@ function openPhoto(url,label){
   img.src=url;img.alt=label||'Plant photo';modal.hidden=false;document.body.style.overflow='hidden';
 }
 function closePhoto(){document.querySelector('#photoModal').hidden=true;document.querySelector('#modalImage').src='';document.body.style.overflow=''}
-async function load(){try{const months=await api('/rest/v1/customer_availability_snapshots?select=snapshot_month&order=snapshot_month.desc&limit=1');if(!months.length){document.querySelector('#status').textContent='No availability has been published yet.';render();return}const m=months[0].snapshot_month;rows=await api('/rest/v1/customer_availability_snapshots?select=*&snapshot_month=eq.'+encodeURIComponent(m)+'&order=botanical_name.asc,container_size.asc');document.querySelector('#monthLabel').textContent=new Date(m+'-01T12:00:00').toLocaleDateString(undefined,{month:'long',year:'numeric'})+' Availability';const sizeMap=new Map();rows.forEach(r=>{const label=String(r.container_size||'').trim();if(label&&!sizeMap.has(normSize(label)))sizeMap.set(normSize(label),label)});const sizes=[...sizeMap.values()];document.querySelector('#size').innerHTML='<option value="">All sizes</option>'+sizes.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('');document.querySelector('#status').textContent=groupListings(rows).length+' plant/size combinations currently listed.';render()}catch(e){document.querySelector('#status').textContent='Availability could not be loaded.';console.error(e)}}
+async function load(){try{const months=await api('/rest/v1/customer_availability_snapshots?select=snapshot_month&order=snapshot_month.desc&limit=1');if(!months.length){document.querySelector('#status').textContent='No availability has been published yet.';render();return}const m=months[0].snapshot_month;rows=await api('/rest/v1/customer_availability_snapshots?select=*&snapshot_month=eq.'+encodeURIComponent(m)+'&order=botanical_name.asc,container_size.asc');await loadFeaturedPhotos(m);document.querySelector('#monthLabel').textContent=new Date(m+'-01T12:00:00').toLocaleDateString(undefined,{month:'long',year:'numeric'})+' Availability';const sizeMap=new Map();rows.forEach(r=>{const label=String(r.container_size||'').trim();if(label&&!sizeMap.has(normSize(label)))sizeMap.set(normSize(label),label)});const sizes=[...sizeMap.values()];document.querySelector('#size').innerHTML='<option value="">All sizes</option>'+sizes.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('');document.querySelector('#status').textContent=groupListings(rows).length+' plant/size combinations currently listed.';render()}catch(e){document.querySelector('#status').textContent='Availability could not be loaded.';console.error(e)}}
 document.querySelector('#search').addEventListener('input',render);document.querySelector('#size').addEventListener('change',render);document.querySelector('#closeModal').addEventListener('click',closePhoto);document.querySelector('#photoModal').addEventListener('click',e=>{if(e.target.id==='photoModal')closePhoto()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closePhoto()});load();
 </script></body></html>
