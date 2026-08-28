@@ -1,9 +1,32 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Arizona Wholesale Growers Availability</title>
 <style>
-:root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#172018;background:#f3f5f1}*{box-sizing:border-box}body{margin:0}.wrap{max-width:1120px;margin:auto;padding:28px 18px}.hero{background:#fff;border:1px solid #d7ddd5;border-radius:22px;padding:24px;margin-bottom:18px}.eyebrow{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#57705c}.hero h1{margin:5px 0 7px;font-size:clamp(28px,5vw,46px)}.sub{color:#5c675e}.tools{display:grid;grid-template-columns:1.5fr .7fr;gap:10px;margin:18px 0}.tools input,.tools select{font:inherit;min-height:48px;border:1px solid #cbd3c9;border-radius:12px;padding:10px 12px;background:#fff}.status{margin:10px 0 18px;color:#5c675e}.list{background:#fff;border:1px solid #d7ddd5;border-radius:18px;overflow:hidden}.row{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(120px,.5fr) minmax(150px,.55fr);gap:12px;padding:12px 15px;border-top:1px solid #e3e7e1;align-items:center}.row:first-child{border-top:0}.bot{font-weight:800}.common{font-size:13px;color:#657067}.qty{font-size:20px;font-weight:850}.size{display:inline-block;margin-top:8px;padding:4px 9px;background:#edf2eb;border-radius:999px;font-size:12px}.hidden{display:none!important}.thumbs{display:flex;gap:8px;align-items:flex-start}.thumbWrap{display:flex;flex-direction:column;gap:4px;align-items:center}.thumbLabel{font-size:10px;color:#68736b;white-space:nowrap}.thumbBtn{border:0;background:transparent;padding:0;cursor:pointer}.thumb{width:68px;height:52px;object-fit:cover;border-radius:9px;border:1px solid #cfd6cd;display:block}.noPhoto{font-size:11px;color:#7a847c;width:68px;text-align:center}.modal{position:fixed;inset:0;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;padding:24px;z-index:50}.modal[hidden]{display:none}.modalBox{position:relative;max-width:min(920px,95vw);max-height:92vh}.modal img{display:block;max-width:95vw;max-height:88vh;border-radius:14px;background:#fff}.closeModal{position:absolute;right:-10px;top:-10px;width:38px;height:38px;border:0;border-radius:999px;background:#fff;font-size:24px;line-height:1;cursor:pointer;box-shadow:0 3px 14px rgba(0,0,0,.25)}.empty{padding:30px;text-align:center;color:#657067}@media(max-width:650px){.tools{grid-template-columns:1fr}.row{grid-template-columns:minmax(0,1fr) auto minmax(128px,.7fr)}.thumb{width:58px;height:46px}.noPhoto{width:58px}.thumbs{gap:6px}}
+:root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#172018;background:#f3f5f1}*{box-sizing:border-box}body{margin:0}.wrap{max-width:1120px;margin:auto;padding:28px 18px}.hero{background:#fff;border:1px solid #d7ddd5;border-radius:22px;padding:24px;margin-bottom:18px}.eyebrow{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#57705c}.hero h1{margin:5px 0 7px;font-size:clamp(28px,5vw,46px)}.sub{color:#5c675e}.tools{display:grid;grid-template-columns:1.5fr .7fr;gap:10px;margin:18px 0}.tools input,.tools select{font:inherit;min-height:48px;border:1px solid #cbd3c9;border-radius:12px;padding:10px 12px;background:#fff}.status{margin:10px 0 18px;color:#5c675e}.availabilityShell{overflow-x:auto;border:1px solid #d7ddd5;border-radius:18px;background:#fff}
+.availabilityGrid{min-width:1040px}
+.facilityHeader{position:sticky;top:0;z-index:8;display:grid;grid-template-columns:minmax(240px,1.5fr) 120px repeat(4,170px);background:#eef2ec;border-bottom:1px solid #cfd6cd;box-shadow:0 2px 6px rgba(0,0,0,.06)}
+.facilityHeader>div{padding:10px 12px;font-size:12px;font-weight:800;text-align:center;border-left:1px solid #d7ddd5}
+.facilityHeader>div:first-child,.facilityHeader>div:nth-child(2){text-align:left;border-left:0}
+.facilityName{display:block;font-size:13px}
+.photoSubheads{display:flex;justify-content:center;gap:18px;margin-top:3px;font-size:10px;font-weight:600;color:#68736b}
+.row{display:grid;grid-template-columns:minmax(240px,1.5fr) 120px repeat(4,170px);align-items:center;border-top:1px solid #e3e7e1;min-height:80px}
+.row:first-of-type{border-top:0}
+.row>div{padding:10px 12px}
+.facilityPhotos{display:flex;gap:8px;justify-content:center;align-items:center;border-left:1px solid #eef1ed;min-height:78px}
+.bot{font-weight:800}.common{font-size:13px;color:#657067}.qty{font-size:20px;font-weight:850}.size{display:inline-block;margin-top:8px;padding:4px 9px;background:#edf2eb;border-radius:999px;font-size:12px}.hidden{display:none!important}.thumbs{display:flex;gap:8px;align-items:center;justify-content:center}.thumbWrap{display:flex;align-items:center}.thumbLabel{display:none}.thumbBtn{border:0;background:transparent;padding:0;cursor:pointer}.thumb{width:68px;height:52px;object-fit:cover;border-radius:9px;border:1px solid #cfd6cd;display:block}.noPhoto{font-size:11px;color:#7a847c;width:68px;text-align:center}.modal{position:fixed;inset:0;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;padding:24px;z-index:50}.modal[hidden]{display:none}.modalBox{position:relative;max-width:min(920px,95vw);max-height:92vh}.modal img{display:block;max-width:95vw;max-height:88vh;border-radius:14px;background:#fff}.closeModal{position:absolute;right:-10px;top:-10px;width:38px;height:38px;border:0;border-radius:999px;background:#fff;font-size:24px;line-height:1;cursor:pointer;box-shadow:0 3px 14px rgba(0,0,0,.25)}.empty{padding:30px;text-align:center;color:#657067}@media(max-width:650px){.tools{grid-template-columns:1fr}.availabilityGrid{min-width:980px}.facilityHeader{grid-template-columns:220px 110px repeat(4,162px)}.row{grid-template-columns:220px 110px repeat(4,162px)}.thumb{width:58px;height:46px}.noPhoto{width:58px}}.row{grid-template-columns:minmax(0,1fr) auto minmax(128px,.7fr)}.thumb{width:58px;height:46px}.noPhoto{width:58px}.thumbs{gap:6px}}
 </style></head><body><div class="wrap"><section class="hero"><div class="eyebrow">Arizona Wholesale Growers</div><h1>Current Plant Availability</h1><div id="monthLabel" class="sub">Loading published availability…</div><p class="sub">Current plant availability across our growing facilities. Availability is subject to prior sale and confirmation.</p></section>
-<div class="tools"><input id="search" placeholder="Search botanical or common name"><select id="size"><option value="">All sizes</option></select></div><div id="status" class="status"></div><div id="list" class="list"></div><div id="photoModal" class="modal" hidden><div class="modalBox"><button id="closeModal" class="closeModal" aria-label="Close photo">×</button><img id="modalImage" alt=""></div></div></div>
+<div class="tools"><input id="search" placeholder="Search botanical or common name"><select id="size"><option value="">All sizes</option></select></div><div id="status" class="status"></div><div class="availabilityShell">
+      <div class="availabilityGrid">
+        <div class="facilityHeader">
+          <div>Plant</div>
+          <div>Size</div>
+          <div><span class="facilityName">Park View</span><div class="photoSubheads"><span>Plant</span><span>Crop</span></div></div>
+          <div><span class="facilityName">Camp Verde</span><div class="photoSubheads"><span>Plant</span><span>Crop</span></div></div>
+          <div><span class="facilityName">Lake Pleasant</span><div class="photoSubheads"><span>Plant</span><span>Crop</span></div></div>
+          <div><span class="facilityName">Rainbow Valley</span><div class="photoSubheads"><span>Plant</span><span>Crop</span></div></div>
+        </div>
+        <div id="list"></div>
+      </div>
+    </div><div id="photoModal" class="modal" hidden><div class="modalBox"><button id="closeModal" class="closeModal" aria-label="Close photo">×</button><img id="modalImage" alt=""></div></div></div>
 <script>
 const SUPABASE='https://yaobdnvvkfyzbsvrnxgf.supabase.co';const KEY='sb_publishable_niMYCWNf10L9x0iNMJ4ADw_jwrhdFkP';let rows=[];
 async function api(path,options={}){const h={apikey:KEY,Authorization:'Bearer '+KEY,...(options.headers||{})};const r=await fetch(SUPABASE+path,{...options,headers:h});if(!r.ok)throw new Error(await r.text());return r.json()}
@@ -11,17 +34,57 @@ function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt
 async function signed(path){if(!path)return '';try{const r=await api('/storage/v1/object/sign/inventory-photos/'+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({expiresIn:3600})});const p=r.signedURL||r.signedUrl;return p?(p.startsWith('http')?p:SUPABASE+(p.startsWith('/storage/v1')?'':'/storage/v1')+p):''}catch(e){console.warn('Photo unavailable',path,e);return ''}}
 function normSize(v){return String(v||'').trim().toLowerCase().replace(/\s+/g,' ')}
 function filtered(){const q=document.querySelector('#search').value.toLowerCase().trim(),selected=normSize(document.querySelector('#size').value);return rows.filter(r=>{const bot=String(r.botanical_name||'').toLowerCase(),common=String(r.common_name||'').toLowerCase();const matchesText=!q||bot.includes(q)||common.includes(q);const matchesSize=!selected||normSize(r.container_size)===selected;return matchesText&&matchesSize})}
+function groupListings(data){
+  const map=new Map();
+  data.forEach(r=>{
+    const key=[r.botanical_name||'',r.common_name||'',r.container_size||''].join('||');
+    if(!map.has(key))map.set(key,{botanical_name:r.botanical_name||'',common_name:r.common_name||'',container_size:r.container_size||'',facilities:{}});
+    map.get(key).facilities[r.facility||'Unknown']=r;
+  });
+  return [...map.values()].sort((a,b)=>a.botanical_name.localeCompare(b.botanical_name)||a.container_size.localeCompare(b.container_size));
+}
 async function render(){
-  const data=filtered(),list=document.querySelector('#list');
+  const data=groupListings(filtered()),list=document.querySelector('#list');
   list.innerHTML='';
   if(!data.length){list.innerHTML='<div class="empty">No published availability matches these filters.</div>';return}
-  for(const r of data){
-    const individualUrl=await signed(r.individual_photo_path);
-    const cropUrl=await signed(r.crop_photo_path);
+  const facilityOrder=['Park View','Camp Verde','Lake Pleasant','Rainbow Valley'];
+  for(const item of data){
     const d=document.createElement('div');d.className='row';
-    d.innerHTML=`<div><div class="bot">${esc(r.botanical_name)}</div><div class="common">${esc(r.common_name)}</div></div><div><span class="size">${esc(r.container_size)}</span></div><div class="thumbs"><div class="thumbWrap"><span class="thumbLabel">Plant</span>${individualUrl?`<button class="thumbBtn individualThumb" type="button" aria-label="View individual plant photo of ${esc(r.common_name)}"><img class="thumb" src="${individualUrl}" alt="${esc(r.common_name)} individual plant"></button>`:'<span class="noPhoto">No photo</span>'}</div><div class="thumbWrap"><span class="thumbLabel">Crop</span>${cropUrl?`<button class="thumbBtn cropThumb" type="button" aria-label="View crop overview photo of ${esc(r.common_name)}"><img class="thumb" src="${cropUrl}" alt="${esc(r.common_name)} crop overview"></button>`:'<span class="noPhoto">No photo</span>'}</div></div>`;
-    if(individualUrl){d.querySelector('.individualThumb').addEventListener('click',()=>openPhoto(individualUrl,(r.common_name||r.botanical_name)+' — Individual Plant'))}
-    if(cropUrl){d.querySelector('.cropThumb').addEventListener('click',()=>openPhoto(cropUrl,(r.common_name||r.botanical_name)+' — Crop Overview'))}
+    const plant=document.createElement('div');
+    plant.innerHTML=`<div class="bot">${esc(item.botanical_name)}</div><div class="common">${esc(item.common_name)}</div>`;
+    const size=document.createElement('div');
+    size.innerHTML=`<span class="size">${esc(item.container_size)}</span>`;
+    d.appendChild(plant);d.appendChild(size);
+
+    for(const facility of facilityOrder){
+      const cell=document.createElement('div');cell.className='facilityPhotos';
+      const rec=item.facilities[facility];
+      if(!rec){
+        cell.innerHTML='<span class="noPhoto">—</span>';
+        d.appendChild(cell);
+        continue;
+      }
+      const individualUrl=await signed(rec.individual_photo_path);
+      const cropUrl=await signed(rec.crop_photo_path);
+      const thumbs=document.createElement('div');thumbs.className='thumbs';
+      if(individualUrl){
+        const b=document.createElement('button');b.className='thumbBtn';b.type='button';b.setAttribute('aria-label',`View ${facility} individual plant photo`);
+        b.innerHTML=`<img class="thumb" src="${individualUrl}" alt="${esc(item.common_name)} individual plant at ${esc(facility)}">`;
+        b.addEventListener('click',()=>openPhoto(individualUrl,`${item.common_name||item.botanical_name} — ${facility} — Individual Plant`));
+        thumbs.appendChild(b);
+      }else{
+        const n=document.createElement('span');n.className='noPhoto';n.textContent='No plant';thumbs.appendChild(n);
+      }
+      if(cropUrl){
+        const b=document.createElement('button');b.className='thumbBtn';b.type='button';b.setAttribute('aria-label',`View ${facility} crop overview photo`);
+        b.innerHTML=`<img class="thumb" src="${cropUrl}" alt="${esc(item.common_name)} crop overview at ${esc(facility)}">`;
+        b.addEventListener('click',()=>openPhoto(cropUrl,`${item.common_name||item.botanical_name} — ${facility} — Crop Overview`));
+        thumbs.appendChild(b);
+      }else{
+        const n=document.createElement('span');n.className='noPhoto';n.textContent='No crop';thumbs.appendChild(n);
+      }
+      cell.appendChild(thumbs);d.appendChild(cell);
+    }
     list.appendChild(d);
   }
 }
@@ -30,6 +93,6 @@ function openPhoto(url,label){
   img.src=url;img.alt=label||'Plant photo';modal.hidden=false;document.body.style.overflow='hidden';
 }
 function closePhoto(){document.querySelector('#photoModal').hidden=true;document.querySelector('#modalImage').src='';document.body.style.overflow=''}
-async function load(){try{const months=await api('/rest/v1/customer_availability_snapshots?select=snapshot_month&order=snapshot_month.desc&limit=1');if(!months.length){document.querySelector('#status').textContent='No availability has been published yet.';render();return}const m=months[0].snapshot_month;rows=await api('/rest/v1/customer_availability_snapshots?select=*&snapshot_month=eq.'+encodeURIComponent(m)+'&order=botanical_name.asc,container_size.asc');document.querySelector('#monthLabel').textContent=new Date(m+'-01T12:00:00').toLocaleDateString(undefined,{month:'long',year:'numeric'})+' Availability';const sizeMap=new Map();rows.forEach(r=>{const label=String(r.container_size||'').trim();if(label&&!sizeMap.has(normSize(label)))sizeMap.set(normSize(label),label)});const sizes=[...sizeMap.values()];document.querySelector('#size').innerHTML='<option value="">All sizes</option>'+sizes.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('');document.querySelector('#status').textContent=rows.length+' plant/size combinations currently listed.';render()}catch(e){document.querySelector('#status').textContent='Availability could not be loaded.';console.error(e)}}
+async function load(){try{const months=await api('/rest/v1/customer_availability_snapshots?select=snapshot_month&order=snapshot_month.desc&limit=1');if(!months.length){document.querySelector('#status').textContent='No availability has been published yet.';render();return}const m=months[0].snapshot_month;rows=await api('/rest/v1/customer_availability_snapshots?select=*&snapshot_month=eq.'+encodeURIComponent(m)+'&order=botanical_name.asc,container_size.asc');document.querySelector('#monthLabel').textContent=new Date(m+'-01T12:00:00').toLocaleDateString(undefined,{month:'long',year:'numeric'})+' Availability';const sizeMap=new Map();rows.forEach(r=>{const label=String(r.container_size||'').trim();if(label&&!sizeMap.has(normSize(label)))sizeMap.set(normSize(label),label)});const sizes=[...sizeMap.values()];document.querySelector('#size').innerHTML='<option value="">All sizes</option>'+sizes.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('');document.querySelector('#status').textContent=groupListings(rows).length+' plant/size combinations currently listed.';render()}catch(e){document.querySelector('#status').textContent='Availability could not be loaded.';console.error(e)}}
 document.querySelector('#search').addEventListener('input',render);document.querySelector('#size').addEventListener('change',render);document.querySelector('#closeModal').addEventListener('click',closePhoto);document.querySelector('#photoModal').addEventListener('click',e=>{if(e.target.id==='photoModal')closePhoto()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closePhoto()});load();
 </script></body></html>
