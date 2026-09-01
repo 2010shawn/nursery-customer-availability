@@ -12,7 +12,7 @@
 .row:first-of-type{border-top:0}
 .row>div{padding:10px 9px}
 .facilityPhotos{display:flex;gap:6px;justify-content:center;align-items:center;min-height:78px;background:#fff;padding-left:6px!important;padding-right:6px!important}.row>div:nth-child(2),.row>div:nth-child(3){border-left:1px solid #dfe3dc}.row>div:nth-child(4),.row>div:nth-child(5),.row>div:nth-child(6),.row>div:nth-child(7){border-left:2px solid var(--awg-line)}.row:nth-child(even) .facilityPhotos,.row:nth-child(even)>div:first-child,.row:nth-child(even)>div:nth-child(2),.row:nth-child(even)>div:nth-child(3){background:#faf8f0}
-.bot{font-weight:800;color:var(--awg-green-dark)}.bot.featuredName{position:relative;display:inline-block;cursor:default;border-bottom:1px dotted var(--awg-rust)}.featuredPreview{position:fixed;z-index:70;width:250px;padding:7px;background:#fff;border:1px solid var(--awg-line);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.28);pointer-events:none}.featuredPreview[hidden]{display:none}.featuredPreview img{display:block;width:100%;max-height:310px;object-fit:contain;border-radius:8px}.featuredPreviewLabel{padding:6px 3px 1px;font-size:12px;font-weight:750;color:var(--awg-green-dark)}.common{font-size:13px;color:#6a766d}.qty{font-size:20px;font-weight:850}.size{display:inline-block;margin-top:8px;padding:5px 10px;border-radius:999px;font-size:12px;font-weight:800;border:1px solid transparent;white-space:nowrap}
+.bot{font-weight:800;color:var(--awg-green-dark)}.bot.featuredName{position:relative;display:inline-block;cursor:default;border-bottom:1px dotted var(--awg-rust)}.featuredPreview{position:fixed;z-index:70;width:250px;padding:7px;background:#fff;border:1px solid var(--awg-line);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.28);pointer-events:auto}.featuredPreviewClose{position:absolute;right:-10px;top:-10px;width:36px;height:36px;border:0;border-radius:999px;background:#fff;color:#222;font-size:23px;line-height:1;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.28);display:flex;align-items:center;justify-content:center}.featuredPreview[hidden]{display:none}.featuredPreview img{display:block;width:100%;max-height:310px;object-fit:contain;border-radius:8px}.featuredPreviewLabel{padding:6px 3px 1px;font-size:12px;font-weight:750;color:var(--awg-green-dark)}.common{font-size:13px;color:#6a766d}.qty{font-size:20px;font-weight:850}.size{display:inline-block;margin-top:8px;padding:5px 10px;border-radius:999px;font-size:12px;font-weight:800;border:1px solid transparent;white-space:nowrap}
 .size-1g{background:#e8efe6;color:#294c37;border-color:#b9cbb9}
 .size-2g{background:#dfe9d8;color:#35553a;border-color:#b3c7aa}
 .size-3g{background:#d3e1cc;color:#2f5237;border-color:#a7be9e}
@@ -47,7 +47,7 @@
         </div>
         <div id="list"></div>
       </div>
-    </div><div id="featuredPreview" class="featuredPreview" hidden><img id="featuredPreviewImage" alt=""><div id="featuredPreviewLabel" class="featuredPreviewLabel"></div></div><div id="photoModal" class="modal" hidden><div class="modalBox"><button id="closeModal" class="closeModal" aria-label="Close photo">×</button><img id="modalImage" alt=""></div></div></div>
+    </div><div id="featuredPreview" class="featuredPreview" hidden><button id="featuredPreviewClose" class="featuredPreviewClose" type="button" aria-label="Close featured photo">×</button><img id="featuredPreviewImage" alt=""><div id="featuredPreviewLabel" class="featuredPreviewLabel"></div></div><div id="photoModal" class="modal" hidden><div class="modalBox"><button id="closeModal" class="closeModal" aria-label="Close photo">×</button><img id="modalImage" alt=""></div></div></div>
 <script>
 const SUPABASE='https://yaobdnvvkfyzbsvrnxgf.supabase.co';const KEY='sb_publishable_niMYCWNf10L9x0iNMJ4ADw_jwrhdFkP';let rows=[],featuredPhotos=new Map();
 async function api(path,options={}){const h={apikey:KEY,Authorization:'Bearer '+KEY,...(options.headers||{})};const r=await fetch(SUPABASE+path,{...options,headers:h});if(!r.ok)throw new Error(await r.text());return r.json()}
@@ -137,9 +137,10 @@ async function render(){
     if(featured){
       const nameEl=plant.querySelector('.featuredName');
       nameEl.addEventListener('mouseenter',()=>showFeaturedPreview(nameEl,item));
-      nameEl.addEventListener('mouseleave',hideFeaturedPreview);
+      nameEl.addEventListener('mouseleave',e=>{if(window.matchMedia('(hover:hover) and (pointer:fine)').matches)hideFeaturedPreview()});
       nameEl.addEventListener('focus',()=>showFeaturedPreview(nameEl,item));
-      nameEl.addEventListener('blur',hideFeaturedPreview);
+      nameEl.addEventListener('blur',e=>{if(window.matchMedia('(hover:hover) and (pointer:fine)').matches)hideFeaturedPreview()});
+      nameEl.addEventListener('click',e=>{e.preventDefault();showFeaturedPreview(nameEl,item)});
     }
     const size=document.createElement('div');
     size.innerHTML=`<span class="size ${sizeClass(item.container_size)}">${esc(item.container_size)}</span>`;
@@ -216,5 +217,5 @@ async function load(){
     console.error(e);
   }
 }
-document.querySelector('#search').addEventListener('input',render);document.querySelector('#size').addEventListener('change',render);document.querySelector('#quality').addEventListener('change',render);document.querySelector('#monthSelect').addEventListener('change',e=>loadMonth(e.target.value));document.querySelector('#closeModal').addEventListener('click',closePhoto);document.querySelector('#photoModal').addEventListener('click',e=>{if(e.target.id==='photoModal')closePhoto()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closePhoto()});load();
+document.querySelector('#search').addEventListener('input',render);document.querySelector('#size').addEventListener('change',render);document.querySelector('#quality').addEventListener('change',render);document.querySelector('#monthSelect').addEventListener('change',e=>loadMonth(e.target.value));document.querySelector('#featuredPreviewClose').addEventListener('click',e=>{e.stopPropagation();hideFeaturedPreview()});document.querySelector('#closeModal').addEventListener('click',closePhoto);document.querySelector('#photoModal').addEventListener('click',e=>{if(e.target.id==='photoModal')closePhoto()});document.addEventListener('keydown',e=>{if(e.key==='Escape'){hideFeaturedPreview();closePhoto()}});load();
 </script></body></html>
