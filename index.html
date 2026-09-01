@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Arizona Wholesale Growers Availability</title>
 <style>
-:root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;--awg-green:#314d3b;--awg-green-dark:#20382a;--awg-rust:#a65435;--awg-cream:#f5f0df;--awg-sage:#e7eadf;--awg-line:#b9c2b5;--awg-text:#26342b;color:var(--awg-text);background:var(--awg-cream)}*{box-sizing:border-box}body{margin:0}.wrap{max-width:1120px;margin:auto;padding:28px 18px}.hero{background:var(--awg-green);color:#fff;border:1px solid var(--awg-green-dark);border-radius:22px;padding:24px;margin-bottom:18px}.eyebrow{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#ead7b8}.hero h1{margin:5px 0 7px;font-size:clamp(28px,5vw,46px)}.sub{color:#5c675e}.hero .sub{color:#f0eadb}.tools{display:grid;grid-template-columns:1.5fr .7fr;gap:10px;margin:18px 0}.tools input,.tools select{font:inherit;min-height:48px;border:1px solid var(--awg-line);border-radius:12px;padding:10px 12px;background:#fff;color:var(--awg-text)}.status{margin:10px 0 18px;color:var(--awg-green-dark);font-weight:600}.availabilityShell{overflow-x:auto;border:1px solid var(--awg-line);border-radius:18px;background:#fff}
+:root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;--awg-green:#314d3b;--awg-green-dark:#20382a;--awg-rust:#a65435;--awg-cream:#f5f0df;--awg-sage:#e7eadf;--awg-line:#b9c2b5;--awg-text:#26342b;color:var(--awg-text);background:var(--awg-cream)}*{box-sizing:border-box}body{margin:0}.wrap{max-width:1120px;margin:auto;padding:28px 18px}.hero{background:var(--awg-green);color:#fff;border:1px solid var(--awg-green-dark);border-radius:22px;padding:24px;margin-bottom:18px}.eyebrow{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#ead7b8}.hero h1{margin:5px 0 7px;font-size:clamp(28px,5vw,46px)}.sub{color:#5c675e}.hero .sub{color:#f0eadb}.tools{display:grid;grid-template-columns:1.5fr .7fr .7fr;gap:10px;margin:18px 0}.tools input,.tools select{font:inherit;min-height:48px;border:1px solid var(--awg-line);border-radius:12px;padding:10px 12px;background:#fff;color:var(--awg-text)}.status{margin:10px 0 18px;color:var(--awg-green-dark);font-weight:600}.availabilityShell{overflow-x:auto;border:1px solid var(--awg-line);border-radius:18px;background:#fff}
 .availabilityGrid{--availability-cols:minmax(240px,1.5fr) 120px repeat(4,170px);min-width:1040px}
 .stickyTableHeader{position:sticky;top:0;z-index:12;background:var(--awg-green);box-shadow:0 3px 8px rgba(0,0,0,.14)}.stickyBrandBar{display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:66px;padding:8px 16px;background:var(--awg-cream);border-bottom:1px solid var(--awg-line)}.stickyBrandBar img{display:block;width:auto;height:50px;max-width:285px;object-fit:contain}.stickyBrandText{font-size:13px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--awg-green-dark);white-space:nowrap}.facilityHeader{display:grid;grid-template-columns:var(--availability-cols);background:var(--awg-green);color:#fff;border-bottom:3px solid var(--awg-rust)}
 .facilityHeader>div{padding:10px 12px;font-size:12px;font-weight:800;text-align:center;border-left:2px solid rgba(255,255,255,.42)}
@@ -14,7 +14,7 @@
 .facilityPhotos{display:flex;gap:8px;justify-content:center;align-items:center;min-height:78px;background:#fff}.row>div:nth-child(2){border-left:1px solid #dfe3dc}.row>div:nth-child(3),.row>div:nth-child(4),.row>div:nth-child(5),.row>div:nth-child(6){border-left:2px solid var(--awg-line)}.row:nth-child(even) .facilityPhotos,.row:nth-child(even)>div:first-child,.row:nth-child(even)>div:nth-child(2){background:#faf8f0}
 .bot{font-weight:800;color:var(--awg-green-dark)}.bot.featuredName{position:relative;display:inline-block;cursor:default;border-bottom:1px dotted var(--awg-rust)}.featuredPreview{position:fixed;z-index:70;width:250px;padding:7px;background:#fff;border:1px solid var(--awg-line);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.28);pointer-events:none}.featuredPreview[hidden]{display:none}.featuredPreview img{display:block;width:100%;max-height:310px;object-fit:contain;border-radius:8px}.featuredPreviewLabel{padding:6px 3px 1px;font-size:12px;font-weight:750;color:var(--awg-green-dark)}.common{font-size:13px;color:#6a766d}.qty{font-size:20px;font-weight:850}.size{display:inline-block;margin-top:8px;padding:4px 9px;background:#f1e1d8;color:#7d3d29;border:1px solid #d7b4a5;border-radius:999px;font-size:12px;font-weight:700}.hidden{display:none!important}.thumbs{display:flex;gap:8px;align-items:center;justify-content:center}.thumbWrap{display:flex;align-items:center}.thumbLabel{display:none}.thumbBtn{border:0;background:transparent;padding:0;cursor:pointer}.thumb{width:68px;height:52px;object-fit:cover;border-radius:9px;border:1px solid #cfd6cd;display:block}.noPhoto{font-size:11px;color:#7a847c;width:68px;text-align:center}.modal{position:fixed;inset:0;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;padding:24px;z-index:50}.modal[hidden]{display:none}.modalBox{position:relative;max-width:min(920px,95vw);max-height:92vh}.modal img{display:block;max-width:95vw;max-height:88vh;border-radius:14px;background:#fff}.closeModal{position:absolute;right:-10px;top:-10px;width:38px;height:38px;border:0;border-radius:999px;background:#fff;font-size:24px;line-height:1;cursor:pointer;box-shadow:0 3px 14px rgba(0,0,0,.25)}.empty{padding:30px;text-align:center;color:#657067}@media(max-width:650px){.tools{grid-template-columns:1fr}.availabilityGrid{--availability-cols:220px 110px repeat(4,162px);min-width:980px}.stickyBrandBar{min-height:58px;padding:6px 12px}.stickyBrandBar img{height:43px;max-width:245px}.stickyBrandText{font-size:11px}.thumb{width:58px;height:46px}.noPhoto{width:58px}}
 </style></head><body><div class="wrap"><section class="hero"><div class="eyebrow">Arizona Wholesale Growers</div><h1>Current Plant Availability</h1><div id="monthLabel" class="sub">Loading published availability…</div><p class="sub">Current plant availability across our growing facilities. Availability is subject to prior sale and confirmation.</p></section>
-<div class="tools"><input id="search" placeholder="Search botanical or common name"><select id="size"><option value="">All sizes</option></select></div><div id="status" class="status"></div><div class="availabilityShell">
+<div class="tools"><input id="search" placeholder="Search botanical or common name"><select id="size"><option value="">All sizes</option></select><select id="monthSelect" aria-label="Inventory month"></select></div><div id="status" class="status"></div><div class="availabilityShell">
       <div class="availabilityGrid">
         <div class="stickyTableHeader">
           <div class="stickyBrandBar">
@@ -127,6 +127,39 @@ function openPhoto(url,label){
   img.src=url;img.alt=label||'Plant photo';modal.hidden=false;document.body.style.overflow='hidden';
 }
 function closePhoto(){document.querySelector('#photoModal').hidden=true;document.querySelector('#modalImage').src='';document.body.style.overflow=''}
-async function load(){try{const months=await api('/rest/v1/customer_availability_snapshots?select=snapshot_month&order=snapshot_month.desc&limit=1');if(!months.length){document.querySelector('#status').textContent='No availability has been published yet.';render();return}const m=months[0].snapshot_month;rows=await api('/rest/v1/customer_availability_snapshots?select=*&snapshot_month=eq.'+encodeURIComponent(m)+'&order=botanical_name.asc,container_size.asc');await loadFeaturedPhotos(m);document.querySelector('#monthLabel').textContent=new Date(m+'-01T12:00:00').toLocaleDateString(undefined,{month:'long',year:'numeric'})+' Availability';const sizeMap=new Map();rows.forEach(r=>{const label=String(r.container_size||'').trim();if(label&&!sizeMap.has(normSize(label)))sizeMap.set(normSize(label),label)});const sizes=[...sizeMap.values()];document.querySelector('#size').innerHTML='<option value="">All sizes</option>'+sizes.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('');document.querySelector('#status').textContent=groupListings(rows).length+' plant/size combinations currently listed.';render()}catch(e){document.querySelector('#status').textContent='Availability could not be loaded.';console.error(e)}}
-document.querySelector('#search').addEventListener('input',render);document.querySelector('#size').addEventListener('change',render);document.querySelector('#closeModal').addEventListener('click',closePhoto);document.querySelector('#photoModal').addEventListener('click',e=>{if(e.target.id==='photoModal')closePhoto()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closePhoto()});load();
+async function loadMonth(m){
+  try{
+    rows=await api('/rest/v1/customer_availability_snapshots?select=*&snapshot_month=eq.'+encodeURIComponent(m)+'&order=botanical_name.asc,container_size.asc');
+    await loadFeaturedPhotos(m);
+    document.querySelector('#monthLabel').textContent=new Date(m+'-01T12:00:00').toLocaleDateString(undefined,{month:'long',year:'numeric'})+' Availability';
+    const sizeMap=new Map();
+    rows.forEach(r=>{const label=String(r.container_size||'').trim();if(label&&!sizeMap.has(normSize(label)))sizeMap.set(normSize(label),label)});
+    const sizes=[...sizeMap.values()];
+    document.querySelector('#size').innerHTML='<option value="">All sizes</option>'+sizes.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('');
+    document.querySelector('#status').textContent=groupListings(rows).length+' plant/size combinations currently listed.';
+    render();
+  }catch(e){
+    document.querySelector('#status').textContent='Availability could not be loaded.';
+    console.error(e);
+  }
+}
+async function load(){
+  try{
+    const months=await api('/rest/v1/customer_availability_snapshots?select=snapshot_month&order=snapshot_month.desc');
+    const unique=[...new Set((months||[]).map(r=>r.snapshot_month).filter(Boolean))];
+    if(!unique.length){
+      document.querySelector('#status').textContent='No availability has been published yet.';
+      render();
+      return;
+    }
+    const sel=document.querySelector('#monthSelect');
+    sel.innerHTML=unique.map(m=>`<option value="${esc(m)}">${new Date(m+'-01T12:00:00').toLocaleDateString(undefined,{month:'long',year:'numeric'})}</option>`).join('');
+    sel.value=unique[0];
+    await loadMonth(unique[0]);
+  }catch(e){
+    document.querySelector('#status').textContent='Availability could not be loaded.';
+    console.error(e);
+  }
+}
+document.querySelector('#search').addEventListener('input',render);document.querySelector('#size').addEventListener('change',render);document.querySelector('#monthSelect').addEventListener('change',e=>loadMonth(e.target.value));document.querySelector('#closeModal').addEventListener('click',closePhoto);document.querySelector('#photoModal').addEventListener('click',e=>{if(e.target.id==='photoModal')closePhoto()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closePhoto()});load();
 </script></body></html>
