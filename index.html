@@ -40,6 +40,10 @@ async function api(path,options={}){const h={apikey:KEY,Authorization:'Bearer '+
 function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 async function signed(path){if(!path)return '';try{const r=await api('/storage/v1/object/sign/inventory-photos/'+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({expiresIn:3600})});const p=r.signedURL||r.signedUrl;return p?(p.startsWith('http')?p:SUPABASE+(p.startsWith('/storage/v1')?'':'/storage/v1')+p):''}catch(e){console.warn('Photo unavailable',path,e);return ''}}
 function normSize(v){return String(v||'').trim().toLowerCase().replace(/\s+/g,' ')}
+function qualityLabel(item){
+  const vals=[...item.qualityValues];
+  return vals.length>1?'Retail / Landscape':(vals[0]?'Retail':'Landscape');
+}
 function filtered(){
   const q=document.querySelector('#search').value.toLowerCase().trim();
   const selectedSize=normSize(document.querySelector('#size').value);
