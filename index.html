@@ -178,7 +178,14 @@ async function createWishPdf(){
     const pageW=doc.internal.pageSize.getWidth();
     let logo=null;
     try{logo=await logoDataUrl()}catch(e){console.warn(e)}
-    if(logo)doc.addImage(logo,'PNG',42,30,210,52,undefined,'FAST');
+    if(logo){
+      const props=doc.getImageProperties(logo);
+      const maxW=210,maxH=52;
+      const ratio=props.width/props.height;
+      let logoW=maxW,logoH=logoW/ratio;
+      if(logoH>maxH){logoH=maxH;logoW=logoH*ratio}
+      doc.addImage(logo,'PNG',42,30,logoW,logoH,undefined,'FAST');
+    }
     doc.setTextColor(49,77,59);
     doc.setFont('helvetica','bold');doc.setFontSize(19);
     doc.text('Plant Wish List',pageW-42,48,{align:'right'});
