@@ -2,16 +2,16 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Arizona Wholesale Growers Availability</title>
 <style>
 :root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;--awg-green:#314d3b;--awg-green-dark:#20382a;--awg-rust:#a65435;--awg-cream:#f5f0df;--awg-sage:#e7eadf;--awg-line:#b9c2b5;--awg-text:#26342b;color:var(--awg-text);background:var(--awg-cream)}*{box-sizing:border-box}body{margin:0}.wrap{max-width:1120px;margin:auto;padding:28px 18px}.hero{background:var(--awg-green);color:#fff;border:1px solid var(--awg-green-dark);border-radius:22px;padding:24px;margin-bottom:18px}.eyebrow{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#ead7b8}.hero h1{margin:5px 0 7px;font-size:clamp(28px,5vw,46px)}.sub{color:#5c675e}.hero .sub{color:#f0eadb}.tools{display:grid;grid-template-columns:1.45fr .62fr .72fr .72fr;gap:10px;margin:18px 0}.tools input,.tools select{font:inherit;min-height:48px;border:1px solid var(--awg-line);border-radius:12px;padding:10px 12px;background:#fff;color:var(--awg-text)}.status{margin:10px 0 18px;color:var(--awg-green-dark);font-weight:600}.availabilityShell{overflow-x:auto;border:1px solid var(--awg-line);border-radius:18px;background:#fff}@media(min-width:1100px){.availabilityShell{overflow-x:hidden}.availabilityGrid{width:100%;min-width:0}}
-.availabilityGrid{--availability-cols:145px minmax(220px,1.35fr) 105px repeat(4,minmax(145px,1fr));min-width:0}
+.availabilityGrid{--availability-cols:76px 128px minmax(205px,1.25fr) 100px repeat(4,minmax(138px,1fr));min-width:0}
 .stickyTableHeader{position:sticky;top:0;z-index:12;background:var(--awg-green);box-shadow:0 3px 8px rgba(0,0,0,.14)}.stickyBrandBar{display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:66px;padding:8px 16px;background:var(--awg-cream);border-bottom:1px solid var(--awg-line)}.stickyBrandBar img{display:block;width:auto;height:50px;max-width:285px;object-fit:contain}.stickyBrandText{font-size:13px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--awg-green-dark);white-space:nowrap}.facilityHeader{display:grid;grid-template-columns:var(--availability-cols);background:var(--awg-green);color:#fff;border-bottom:3px solid var(--awg-rust)}
 .facilityHeader>div{padding:10px 8px;font-size:12px;font-weight:800;text-align:center;border-left:2px solid rgba(255,255,255,.42)}
-.facilityHeader>div:first-child,.facilityHeader>div:nth-child(2),.facilityHeader>div:nth-child(3){text-align:left}.facilityHeader>div:first-child{border-left:0}
+.facilityHeader>div:nth-child(2),.facilityHeader>div:nth-child(3),.facilityHeader>div:nth-child(4){text-align:left}.facilityHeader>div:first-child{border-left:0}
 .facilityName{display:block;font-size:13px}
 .photoSubheads{display:flex;justify-content:center;gap:18px;margin-top:3px;font-size:10px;font-weight:600;color:#e9e2d2}
 .row{display:grid;grid-template-columns:var(--availability-cols);align-items:stretch;border-top:1px solid #dfe3dc;min-height:80px}
 .row:first-of-type{border-top:0}
 .row>div{padding:10px 9px}
-.facilityPhotos{display:flex;gap:6px;justify-content:center;align-items:center;min-height:78px;background:#fff;padding-left:6px!important;padding-right:6px!important}.row>div:nth-child(2),.row>div:nth-child(3){border-left:1px solid #dfe3dc}.row>div:nth-child(4),.row>div:nth-child(5),.row>div:nth-child(6),.row>div:nth-child(7){border-left:2px solid var(--awg-line)}.row:nth-child(even) .facilityPhotos,.row:nth-child(even)>div:first-child,.row:nth-child(even)>div:nth-child(2),.row:nth-child(even)>div:nth-child(3){background:#faf8f0}
+.facilityPhotos{display:flex;gap:6px;justify-content:center;align-items:center;min-height:78px;background:#fff;padding-left:6px!important;padding-right:6px!important}.row>div:nth-child(2),.row>div:nth-child(3),.row>div:nth-child(4){border-left:1px solid #dfe3dc}.row>div:nth-child(5),.row>div:nth-child(6),.row>div:nth-child(7),.row>div:nth-child(8){border-left:2px solid var(--awg-line)}.row:nth-child(even) .facilityPhotos,.row:nth-child(even)>div:first-child,.row:nth-child(even)>div:nth-child(2),.row:nth-child(even)>div:nth-child(3),.row:nth-child(even)>div:nth-child(4){background:#faf8f0}
 .bot{font-weight:800;color:var(--awg-green-dark)}.bot.featuredName{position:relative;display:inline-block;cursor:default;border-bottom:1px dotted var(--awg-rust)}.featuredPreview{position:fixed;z-index:70;width:250px;padding:7px;background:#fff;border:1px solid var(--awg-line);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.28);pointer-events:auto}.featuredPreviewClose{position:absolute;right:-10px;top:-10px;width:36px;height:36px;border:0;border-radius:999px;background:#fff;color:#222;font-size:23px;line-height:1;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.28);display:flex;align-items:center;justify-content:center}.featuredPreview[hidden]{display:none}.featuredPreview img{display:block;width:100%;max-height:310px;object-fit:contain;border-radius:8px}.featuredPreviewLabel{padding:6px 3px 1px;font-size:12px;font-weight:750;color:var(--awg-green-dark)}.common{font-size:13px;color:#6a766d}.qty{font-size:20px;font-weight:850}.size{display:inline-block;margin-top:8px;padding:5px 10px;border-radius:999px;font-size:12px;font-weight:800;border:1px solid transparent;white-space:nowrap}
 .size-1g{background:#e8efe6;color:#294c37;border-color:#b9cbb9}
 .size-2g{background:#dfe9d8;color:#35553a;border-color:#b3c7aa}
@@ -26,9 +26,16 @@
 .size-box24{background:#c9b57d;color:#493d25;border-color:#af995e}
 .size-box36{background:#a99863;color:#fff;border-color:#8f7e4d}
 .size-box48{background:#776d4e;color:#fff;border-color:#625a40}
-.size-other{background:#ece7d8;color:#4f5146;border-color:#d1c9b4}.qualityTag{display:inline-flex;align-items:center;justify-content:center;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:800;line-height:1.15;white-space:normal;text-align:center;max-width:100%;box-sizing:border-box;background:#edf2eb;color:var(--awg-green-dark);border:1px solid var(--awg-line)}.hidden{display:none!important}.thumbs{display:flex;gap:8px;align-items:center;justify-content:center}.thumbWrap{display:flex;align-items:center}.thumbLabel{display:none}.thumbBtn{border:0;background:transparent;padding:0;cursor:pointer}.thumb{width:60px;height:48px;object-fit:cover;border-radius:9px;border:1px solid #cfd6cd;display:block}.noPhoto{font-size:11px;color:#7a847c;width:68px;text-align:center}.modal{position:fixed;inset:0;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;padding:24px;z-index:50}.modal[hidden]{display:none}.modalBox{position:relative;max-width:min(920px,95vw);max-height:92vh}.modal img{display:block;max-width:95vw;max-height:88vh;border-radius:14px;background:#fff}.closeModal{position:absolute;right:-10px;top:-10px;width:38px;height:38px;border:0;border-radius:999px;background:#fff;font-size:24px;line-height:1;cursor:pointer;box-shadow:0 3px 14px rgba(0,0,0,.25)}.empty{padding:30px;text-align:center;color:#657067}@media(max-width:650px){.tools{grid-template-columns:1fr}.availabilityGrid{--availability-cols:135px 210px 105px repeat(4,150px);min-width:1050px}.stickyBrandBar{min-height:58px;padding:6px 12px}.stickyBrandBar img{height:43px;max-width:245px}.stickyBrandText{font-size:11px}.thumb{width:58px;height:46px}.noPhoto{width:58px}}
+.size-other{background:#ece7d8;color:#4f5146;border-color:#d1c9b4}.qualityTag{display:inline-flex;align-items:center;justify-content:center;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:800;line-height:1.15;white-space:normal;text-align:center;max-width:100%;box-sizing:border-box;background:#edf2eb;color:var(--awg-green-dark);border:1px solid var(--awg-line)}.hidden{display:none!important}.thumbs{display:flex;gap:8px;align-items:center;justify-content:center}.thumbWrap{display:flex;align-items:center}.thumbLabel{display:none}.thumbBtn{border:0;background:transparent;padding:0;cursor:pointer}.thumb{width:60px;height:48px;object-fit:cover;border-radius:9px;border:1px solid #cfd6cd;display:block}.noPhoto{font-size:11px;color:#7a847c;width:68px;text-align:center}.modal{position:fixed;inset:0;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;padding:24px;z-index:50}.modal[hidden]{display:none}.modalBox{position:relative;max-width:min(920px,95vw);max-height:92vh}.modal img{display:block;max-width:95vw;max-height:88vh;border-radius:14px;background:#fff}.closeModal{position:absolute;right:-10px;top:-10px;width:38px;height:38px;border:0;border-radius:999px;background:#fff;font-size:24px;line-height:1;cursor:pointer;box-shadow:0 3px 14px rgba(0,0,0,.25)}.wishQty{width:58px;min-height:42px;border:1px solid var(--awg-line);border-radius:9px;padding:7px 6px;font:inherit;font-size:16px;text-align:center;background:#fff;color:var(--awg-text)}
+.wishQty:focus{outline:2px solid var(--awg-rust);outline-offset:1px}
+.wishBar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:2px 0 14px;padding:12px 14px;border:1px solid var(--awg-line);border-radius:14px;background:#fff}
+.wishBarText{font-size:13px;color:var(--awg-green-dark);font-weight:700}
+.wishActions{display:flex;gap:8px;flex-wrap:wrap}
+.wishButton{min-height:42px;border:0;border-radius:10px;padding:9px 14px;font:inherit;font-weight:800;cursor:pointer;background:var(--awg-green);color:#fff}
+.wishButton.secondary{background:#eee9dc;color:var(--awg-green-dark);border:1px solid var(--awg-line)}
+.wishButton:disabled{opacity:.48;cursor:not-allowed}.empty{padding:30px;text-align:center;color:#657067}@media(max-width:650px){.tools{grid-template-columns:1fr}.availabilityGrid{--availability-cols:76px 128px 205px 100px repeat(4,148px);min-width:1100px}.stickyBrandBar{min-height:58px;padding:6px 12px}.stickyBrandBar img{height:43px;max-width:245px}.stickyBrandText{font-size:11px}.thumb{width:58px;height:46px}.noPhoto{width:58px}}
 </style></head><body><div class="wrap"><section class="hero"><div class="eyebrow">Arizona Wholesale Growers</div><h1>Current Plant Availability</h1><div id="monthLabel" class="sub">Loading published availability…</div><p class="sub">Current plant availability across our growing facilities. Availability is subject to prior sale and confirmation. Please allow additional time for plants that need to be transferred between our growing facilities.</p></section>
-<div class="tools"><input id="search" placeholder="Search botanical or common name"><select id="size"><option value="">All sizes</option></select><select id="quality"><option value="">All Quality</option><option value="retail">Retail</option><option value="landscape">Landscape</option></select><select id="monthSelect" aria-label="Inventory month"></select></div><div id="status" class="status"></div><div class="availabilityShell">
+<div class="tools"><input id="search" placeholder="Search botanical or common name"><select id="size"><option value="">All sizes</option></select><select id="quality"><option value="">All Quality</option><option value="retail">Retail</option><option value="landscape">Landscape</option></select><select id="monthSelect" aria-label="Inventory month"></select></div><div class="wishBar"><div id="wishBarText" class="wishBarText">Wish List: no plants selected</div><div class="wishActions"><button id="clearWishList" class="wishButton secondary" type="button" disabled>Clear Wish List</button><button id="createWishPdf" class="wishButton" type="button" disabled>Create PDF Wish List</button></div></div><div id="status" class="status"></div><div class="availabilityShell">
       <div class="availabilityGrid">
         <div class="stickyTableHeader">
           <div class="stickyBrandBar">
@@ -36,6 +43,7 @@
             <div class="stickyBrandText">Current Plant Availability</div>
           </div>
           <div class="facilityHeader">
+            <div>Wish Qty</div>
             <div>Quality</div>
             <div>Plant</div>
             <div>Size</div>
@@ -48,8 +56,10 @@
         <div id="list"></div>
       </div>
     </div><div id="featuredPreview" class="featuredPreview" hidden><button id="featuredPreviewClose" class="featuredPreviewClose" type="button" aria-label="Close featured photo">×</button><img id="featuredPreviewImage" alt=""><div id="featuredPreviewLabel" class="featuredPreviewLabel"></div></div><div id="photoModal" class="modal" hidden><div class="modalBox"><button id="closeModal" class="closeModal" aria-label="Close photo">×</button><img id="modalImage" alt=""></div></div></div>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js"></script>
 <script>
-const SUPABASE='https://yaobdnvvkfyzbsvrnxgf.supabase.co';const KEY='sb_publishable_niMYCWNf10L9x0iNMJ4ADw_jwrhdFkP';let rows=[],featuredPhotos=new Map();
+const SUPABASE='https://yaobdnvvkfyzbsvrnxgf.supabase.co';const KEY='sb_publishable_niMYCWNf10L9x0iNMJ4ADw_jwrhdFkP';let rows=[],featuredPhotos=new Map(),wishList=new Map(),currentMonth='';
 async function api(path,options={}){const h={apikey:KEY,Authorization:'Bearer '+KEY,...(options.headers||{})};const r=await fetch(SUPABASE+path,{...options,headers:h});if(!r.ok)throw new Error(await r.text());return r.json()}
 function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 async function signed(path){if(!path)return '';try{const r=await api('/storage/v1/object/sign/inventory-photos/'+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({expiresIn:3600})});const p=r.signedURL||r.signedUrl;return p?(p.startsWith('http')?p:SUPABASE+(p.startsWith('/storage/v1')?'':'/storage/v1')+p):''}catch(e){console.warn('Photo unavailable',path,e);return ''}}
@@ -121,6 +131,105 @@ async function showFeaturedPreview(el,item){
   let top=Math.max(margin,Math.min(window.innerHeight-ph-margin,r.top-20));
   preview.style.left=left+'px';preview.style.top=top+'px';
 }
+
+function wishKey(item){return [currentMonth,item.botanical_name||'',item.common_name||'',item.container_size||''].join('||')}
+function updateWishBar(){
+  const selected=[...wishList.values()].filter(x=>Number(x.quantity)>0);
+  const totalQty=selected.reduce((sum,x)=>sum+Number(x.quantity||0),0);
+  const text=document.querySelector('#wishBarText');
+  text.textContent=selected.length?`Wish List: ${selected.length} plant${selected.length===1?'':'s'} · ${totalQty.toLocaleString()} total units`:'Wish List: no plants selected';
+  document.querySelector('#createWishPdf').disabled=!selected.length;
+  document.querySelector('#clearWishList').disabled=!selected.length;
+}
+function setWishQuantity(item,value){
+  const qty=Math.max(0,Math.floor(Number(value)||0));
+  const key=wishKey(item);
+  if(qty>0){
+    wishList.set(key,{quantity:qty,size:item.container_size,botanical:item.botanical_name,common:item.common_name,quality:qualityLabel(item),month:currentMonth});
+  }else{
+    wishList.delete(key);
+  }
+  updateWishBar();
+}
+function clearWishList(){
+  wishList.clear();
+  updateWishBar();
+  render();
+}
+function pdfSafe(v){
+  return String(v??'').replace(/[‘’]/g,"'").replace(/[“”]/g,'"').replace(/[–—]/g,'-').replace(/[^\x20-\x7E]/g,'');
+}
+async function logoDataUrl(){
+  const r=await fetch('awg-logo.png');
+  if(!r.ok)throw new Error('Logo could not be loaded.');
+  const blob=await r.blob();
+  return await new Promise((resolve,reject)=>{const fr=new FileReader();fr.onload=()=>resolve(fr.result);fr.onerror=reject;fr.readAsDataURL(blob)});
+}
+async function createWishPdf(){
+  const selected=[...wishList.values()].filter(x=>Number(x.quantity)>0);
+  if(!selected.length)return;
+  const btn=document.querySelector('#createWishPdf');
+  const original=btn.textContent;
+  btn.disabled=true;btn.textContent='Creating PDF...';
+  try{
+    if(!window.jspdf||!window.jspdf.jsPDF)throw new Error('PDF tools did not load. Please refresh and try again.');
+    const {jsPDF}=window.jspdf;
+    const doc=new jsPDF({orientation:'portrait',unit:'pt',format:'letter'});
+    const pageW=doc.internal.pageSize.getWidth();
+    let logo=null;
+    try{logo=await logoDataUrl()}catch(e){console.warn(e)}
+    if(logo)doc.addImage(logo,'PNG',42,30,210,52,undefined,'FAST');
+    doc.setTextColor(49,77,59);
+    doc.setFont('helvetica','bold');doc.setFontSize(19);
+    doc.text('Plant Wish List',pageW-42,48,{align:'right'});
+    doc.setFont('helvetica','normal');doc.setFontSize(10);doc.setTextColor(80,86,81);
+    const today=new Date();
+    const dateText=today.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+    doc.text(pdfSafe(dateText),pageW-42,66,{align:'right'});
+    if(currentMonth){
+      const inv=new Date(currentMonth+'-01T12:00:00').toLocaleDateString(undefined,{year:'numeric',month:'long'});
+      doc.text('Availability month: '+pdfSafe(inv),pageW-42,80,{align:'right'});
+    }
+    doc.setDrawColor(166,84,53);doc.setLineWidth(2);doc.line(42,94,pageW-42,94);
+    doc.setFontSize(9);doc.setTextColor(90,95,91);
+    doc.text('Wishlist only - availability is subject to prior sale and confirmation.',42,111);
+
+    const body=selected
+      .sort((a,b)=>a.botanical.localeCompare(b.botanical)||a.size.localeCompare(b.size))
+      .map(x=>[String(x.quantity),pdfSafe(x.size),pdfSafe(x.botanical),pdfSafe(x.common),pdfSafe(x.quality)]);
+    doc.autoTable({
+      startY:126,
+      head:[['Quantity','Size','Botanical Name','Common Name','Quality']],
+      body,
+      theme:'grid',
+      styles:{font:'helvetica',fontSize:9,cellPadding:6,textColor:[38,52,43],lineColor:[185,194,181],lineWidth:.5,overflow:'linebreak'},
+      headStyles:{fillColor:[49,77,59],textColor:[255,255,255],fontStyle:'bold',lineColor:[49,77,59]},
+      alternateRowStyles:{fillColor:[250,248,240]},
+      columnStyles:{
+        0:{cellWidth:55,halign:'center'},
+        1:{cellWidth:65},
+        2:{cellWidth:150},
+        3:{cellWidth:145},
+        4:{cellWidth:92}
+      },
+      margin:{left:42,right:42,bottom:44},
+      didDrawPage:function(data){
+        const h=doc.internal.pageSize.getHeight();
+        doc.setFontSize(8);doc.setTextColor(120,124,120);
+        doc.text('Arizona Wholesale Growers',42,h-22);
+        doc.text('Page '+doc.internal.getNumberOfPages(),pageW-42,h-22,{align:'right'});
+      }
+    });
+    const stamp=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
+    doc.save('AWG-Plant-Wish-List-'+stamp+'.pdf');
+  }catch(err){
+    console.error(err);
+    document.querySelector('#status').textContent='Wish List PDF could not be created. '+(err&&err.message?err.message:'Please try again.');
+  }finally{
+    btn.textContent=original;
+    updateWishBar();
+  }
+}
 async function render(){
   const data=filtered(),list=document.querySelector('#list');
   list.innerHTML='';
@@ -128,6 +237,13 @@ async function render(){
   const facilityOrder=['Park View','Camp Verde','Lake Pleasant','Rainbow Valley'];
   for(const item of data){
     const d=document.createElement('div');d.className='row';
+    const wish=document.createElement('div');
+    const qtyInput=document.createElement('input');
+    qtyInput.className='wishQty';qtyInput.type='number';qtyInput.min='0';qtyInput.step='1';qtyInput.inputMode='numeric';qtyInput.placeholder='0';
+    const existingWish=wishList.get(wishKey(item));qtyInput.value=existingWish?existingWish.quantity:'';
+    qtyInput.setAttribute('aria-label',`Wish List quantity for ${item.common_name||item.botanical_name} ${item.container_size}`);
+    qtyInput.addEventListener('input',()=>setWishQuantity(item,qtyInput.value));
+    wish.appendChild(qtyInput);
     const quality=document.createElement('div');
     const qualityText=qualityLabel(item);
     quality.innerHTML=`<span class="qualityTag">${qualityText}</span>`;
@@ -144,7 +260,7 @@ async function render(){
     }
     const size=document.createElement('div');
     size.innerHTML=`<span class="size ${sizeClass(item.container_size)}">${esc(item.container_size)}</span>`;
-    d.appendChild(quality);d.appendChild(plant);d.appendChild(size);
+    d.appendChild(wish);d.appendChild(quality);d.appendChild(plant);d.appendChild(size);
 
     for(const facility of facilityOrder){
       const cell=document.createElement('div');cell.className='facilityPhotos';
@@ -185,6 +301,8 @@ function openPhoto(url,label){
 function closePhoto(){document.querySelector('#photoModal').hidden=true;document.querySelector('#modalImage').src='';document.body.style.overflow=''}
 async function loadMonth(m){
   try{
+    if(currentMonth&&currentMonth!==m&&wishList.size){wishList.clear();updateWishBar()}
+    currentMonth=m;
     rows=await api('/rest/v1/customer_availability_snapshots?select=*&snapshot_month=eq.'+encodeURIComponent(m)+'&order=botanical_name.asc,container_size.asc');
     await loadFeaturedPhotos(m);
     document.querySelector('#monthLabel').textContent=new Date(m+'-01T12:00:00').toLocaleDateString(undefined,{month:'long',year:'numeric'})+' Availability';
@@ -217,5 +335,5 @@ async function load(){
     console.error(e);
   }
 }
-document.querySelector('#search').addEventListener('input',render);document.querySelector('#size').addEventListener('change',render);document.querySelector('#quality').addEventListener('change',render);document.querySelector('#monthSelect').addEventListener('change',e=>loadMonth(e.target.value));document.querySelector('#featuredPreviewClose').addEventListener('click',e=>{e.stopPropagation();hideFeaturedPreview()});document.querySelector('#closeModal').addEventListener('click',closePhoto);document.querySelector('#photoModal').addEventListener('click',e=>{if(e.target.id==='photoModal')closePhoto()});document.addEventListener('keydown',e=>{if(e.key==='Escape'){hideFeaturedPreview();closePhoto()}});load();
+document.querySelector('#search').addEventListener('input',render);document.querySelector('#size').addEventListener('change',render);document.querySelector('#quality').addEventListener('change',render);document.querySelector('#monthSelect').addEventListener('change',e=>loadMonth(e.target.value));document.querySelector('#featuredPreviewClose').addEventListener('click',e=>{e.stopPropagation();hideFeaturedPreview()});document.querySelector('#closeModal').addEventListener('click',closePhoto);document.querySelector('#photoModal').addEventListener('click',e=>{if(e.target.id==='photoModal')closePhoto()});document.querySelector('#clearWishList').addEventListener('click',clearWishList);document.querySelector('#createWishPdf').addEventListener('click',createWishPdf);document.addEventListener('keydown',e=>{if(e.key==='Escape'){hideFeaturedPreview();closePhoto()}});updateWishBar();load();
 </script></body></html>
