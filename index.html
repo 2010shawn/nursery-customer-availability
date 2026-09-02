@@ -187,6 +187,7 @@ function printAvailability(){
       <td>${esc(item.common_name)}</td>
       <td>${esc(item.container_size)}</td>
       <td>${esc(qualityLabel(item))}</td>
+      <td class="quantityCell"></td>
     </tr>`).join('');
 
   const popup=window.open('','_blank');
@@ -202,22 +203,24 @@ function printAvailability(){
 <meta charset="utf-8">
 <title>Arizona Wholesale Growers - Plant Availability</title>
 <style>
-  @page{size:auto;margin:.55in}
+  @page{size:letter portrait;margin:.45in}
   *{box-sizing:border-box}
   body{font-family:Arial,Helvetica,sans-serif;color:#24342a;margin:0;background:#fff}
   .header{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;margin-bottom:18px;padding-bottom:14px;border-bottom:3px solid #a65435}
-  .logo{max-width:250px;max-height:70px;object-fit:contain}
-  h1{font-size:22px;margin:0 0 5px;color:#314d3b}
+  .logo{max-width:210px;max-height:58px;object-fit:contain}
+  h1{font-size:20px;margin:0 0 5px;color:#314d3b}
   .meta{font-size:11px;line-height:1.5;color:#59645c;text-align:right}
   .filters{font-size:10px;color:#677168;margin-bottom:12px}
-  table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:10.5px}
-  th{background:#314d3b;color:#fff;text-align:left;padding:8px 7px;border:1px solid #314d3b}
-  td{padding:7px;border:1px solid #c7d0c7;vertical-align:top;word-wrap:break-word}
+  table{width:auto;max-width:100%;border-collapse:collapse;table-layout:auto;font-size:10.5px;margin:0}
+  th{background:#314d3b;color:#fff;text-align:left;padding:6px 7px;border:1px solid #314d3b;white-space:nowrap}
+  td{padding:6px 7px;border:1px solid #c7d0c7;vertical-align:top;line-height:1.25}
   tbody tr:nth-child(even){background:#faf8f0}
-  th:nth-child(1),td:nth-child(1){width:34%}
-  th:nth-child(2),td:nth-child(2){width:30%}
-  th:nth-child(3),td:nth-child(3){width:17%}
-  th:nth-child(4),td:nth-child(4){width:19%}
+  th:nth-child(1),td:nth-child(1){min-width:165px;max-width:220px}
+  th:nth-child(2),td:nth-child(2){min-width:145px;max-width:200px}
+  th:nth-child(3),td:nth-child(3){width:82px;white-space:nowrap}
+  th:nth-child(4),td:nth-child(4){width:112px;white-space:nowrap}
+  th:nth-child(5),td:nth-child(5){width:78px}
+  td.quantityCell{height:28px}
   .foot{margin-top:12px;font-size:9px;color:#6d756f}
   @media print{.noPrint{display:none!important}}
 </style>
@@ -232,7 +235,7 @@ function printAvailability(){
   </div>
   <div class="filters">Printed view: ${esc(sizeText)} · ${esc(qualityText)}${searchText?' · Search: '+esc(searchText):''}</div>
   <table>
-    <thead><tr><th>Botanical Name</th><th>Common Name</th><th>Size</th><th>Quality</th></tr></thead>
+    <thead><tr><th>Botanical Name</th><th>Common Name</th><th>Size</th><th>Quality</th><th>Quantity</th></tr></thead>
     <tbody>${rowsHtml}</tbody>
   </table>
   <div class="foot">Availability is subject to prior sale and confirmation. Please allow additional time for plants that need to be transferred between our growing facilities.</div>
