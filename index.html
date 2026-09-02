@@ -35,7 +35,7 @@
 .wishButton.secondary{background:#eee9dc;color:var(--awg-green-dark);border:1px solid var(--awg-line)}
 .wishButton:disabled{opacity:.48;cursor:not-allowed}.empty{padding:30px;text-align:center;color:#657067}@media(max-width:650px){.tools{grid-template-columns:1fr}.availabilityGrid{--availability-cols:76px 128px 205px 100px repeat(4,148px);min-width:1100px}.stickyBrandBar{min-height:58px;padding:6px 12px}.stickyBrandBar img{height:43px;max-width:245px}.stickyBrandText{font-size:11px}.thumb{width:58px;height:46px}.noPhoto{width:58px}}
 </style></head><body><div class="wrap"><section class="hero"><div class="eyebrow">Arizona Wholesale Growers</div><h1>Current Plant Availability</h1><div id="monthLabel" class="sub">Loading published availability…</div><p class="sub">Current plant availability across our growing facilities. Availability is subject to prior sale and confirmation. Please allow additional time for plants that need to be transferred between our growing facilities.</p></section>
-<div class="tools"><input id="search" placeholder="Search botanical or common name"><select id="size"><option value="">All sizes</option></select><select id="quality"><option value="">All Quality</option><option value="retail">Retail</option><option value="landscape">Landscape</option></select><select id="monthSelect" aria-label="Inventory month"></select></div><div class="wishBar"><div id="wishBarText" class="wishBarText">Wish List: no plants selected</div><div class="wishActions"><button id="clearWishList" class="wishButton secondary" type="button" disabled>Clear Wish List</button><button id="createWishPdf" class="wishButton" type="button" disabled>Create PDF Wish List</button></div></div><div id="status" class="status"></div><div class="availabilityShell">
+<div class="tools"><input id="search" placeholder="Search botanical or common name"><select id="size"><option value="">All sizes</option></select><select id="quality"><option value="">All Quality</option><option value="retail">Retail</option><option value="landscape">Landscape</option></select><select id="monthSelect" aria-label="Inventory month"></select></div><div class="wishBar"><div id="wishBarText" class="wishBarText">Wish List: no plants selected</div><div class="wishActions"><button id="printAvailability" class="wishButton secondary" type="button">Print Availability</button><button id="clearWishList" class="wishButton secondary" type="button" disabled>Clear Wish List</button><button id="createWishPdf" class="wishButton" type="button" disabled>Create PDF Wish List</button></div></div><div id="status" class="status"></div><div class="availabilityShell">
       <div class="availabilityGrid">
         <div class="stickyTableHeader">
           <div class="stickyBrandBar">
@@ -164,6 +164,84 @@ async function logoDataUrl(){
   if(!r.ok)throw new Error('Logo could not be loaded.');
   const blob=await r.blob();
   return await new Promise((resolve,reject)=>{const fr=new FileReader();fr.onload=()=>resolve(fr.result);fr.onerror=reject;fr.readAsDataURL(blob)});
+}
+function printAvailability(){
+  const data=filtered().slice().sort((a,b)=>{
+    const bot=String(a.botanical_name||'').localeCompare(String(b.botanical_name||''));
+    return bot||String(a.container_size||'').localeCompare(String(b.container_size||''));
+  });
+  if(!data.length){
+    document.querySelector('#status').textContent='There are no plants matching the current filters to print.';
+    return;
+  }
+
+  const monthText=document.querySelector('#monthSelect').selectedOptions[0]?.textContent||'';
+  const qualityText=document.querySelector('#quality').selectedOptions[0]?.textContent||'All Quality';
+  const sizeText=document.querySelector('#size').selectedOptions[0]?.textContent||'All sizes';
+  const searchText=document.querySelector('#search').value.trim();
+  const today=new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+
+  const rowsHtml=data.map(item=>`
+    <tr>
+      <td>${esc(item.botanical_name)}</td>
+      <td>${esc(item.common_name)}</td>
+      <td>${esc(item.container_size)}</td>
+      <td>${esc(qualityLabel(item))}</td>
+    </tr>`).join('');
+
+  const popup=window.open('','_blank');
+  if(!popup){
+    document.querySelector('#status').textContent='Please allow pop-ups for this site to print availability.';
+    return;
+  }
+
+  popup.document.open();
+  popup.document.write(`<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Arizona Wholesale Growers - Plant Availability</title>
+<style>
+  @page{size:auto;margin:.55in}
+  *{box-sizing:border-box}
+  body{font-family:Arial,Helvetica,sans-serif;color:#24342a;margin:0;background:#fff}
+  .header{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;margin-bottom:18px;padding-bottom:14px;border-bottom:3px solid #a65435}
+  .logo{max-width:250px;max-height:70px;object-fit:contain}
+  h1{font-size:22px;margin:0 0 5px;color:#314d3b}
+  .meta{font-size:11px;line-height:1.5;color:#59645c;text-align:right}
+  .filters{font-size:10px;color:#677168;margin-bottom:12px}
+  table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:10.5px}
+  th{background:#314d3b;color:#fff;text-align:left;padding:8px 7px;border:1px solid #314d3b}
+  td{padding:7px;border:1px solid #c7d0c7;vertical-align:top;word-wrap:break-word}
+  tbody tr:nth-child(even){background:#faf8f0}
+  th:nth-child(1),td:nth-child(1){width:34%}
+  th:nth-child(2),td:nth-child(2){width:30%}
+  th:nth-child(3),td:nth-child(3){width:17%}
+  th:nth-child(4),td:nth-child(4){width:19%}
+  .foot{margin-top:12px;font-size:9px;color:#6d756f}
+  @media print{.noPrint{display:none!important}}
+</style>
+</head>
+<body>
+  <div class="header">
+    <img src="awg-logo.png" class="logo" alt="Arizona Wholesale Growers">
+    <div>
+      <h1>Current Plant Availability</h1>
+      <div class="meta">${esc(monthText)}<br>${esc(today)}</div>
+    </div>
+  </div>
+  <div class="filters">Printed view: ${esc(sizeText)} · ${esc(qualityText)}${searchText?' · Search: '+esc(searchText):''}</div>
+  <table>
+    <thead><tr><th>Botanical Name</th><th>Common Name</th><th>Size</th><th>Quality</th></tr></thead>
+    <tbody>${rowsHtml}</tbody>
+  </table>
+  <div class="foot">Availability is subject to prior sale and confirmation. Please allow additional time for plants that need to be transferred between our growing facilities.</div>
+  <script>
+    window.addEventListener('load',()=>setTimeout(()=>window.print(),250));
+  <\/script>
+</body>
+</html>`);
+  popup.document.close();
 }
 async function createWishPdf(){
   const selected=[...wishList.values()].filter(x=>Number(x.quantity)>0);
@@ -342,5 +420,5 @@ async function load(){
     console.error(e);
   }
 }
-document.querySelector('#search').addEventListener('input',render);document.querySelector('#size').addEventListener('change',render);document.querySelector('#quality').addEventListener('change',render);document.querySelector('#monthSelect').addEventListener('change',e=>loadMonth(e.target.value));document.querySelector('#featuredPreviewClose').addEventListener('click',e=>{e.stopPropagation();hideFeaturedPreview()});document.querySelector('#closeModal').addEventListener('click',closePhoto);document.querySelector('#photoModal').addEventListener('click',e=>{if(e.target.id==='photoModal')closePhoto()});document.querySelector('#clearWishList').addEventListener('click',clearWishList);document.querySelector('#createWishPdf').addEventListener('click',createWishPdf);document.addEventListener('keydown',e=>{if(e.key==='Escape'){hideFeaturedPreview();closePhoto()}});updateWishBar();load();
+document.querySelector('#search').addEventListener('input',render);document.querySelector('#size').addEventListener('change',render);document.querySelector('#quality').addEventListener('change',render);document.querySelector('#monthSelect').addEventListener('change',e=>loadMonth(e.target.value));document.querySelector('#featuredPreviewClose').addEventListener('click',e=>{e.stopPropagation();hideFeaturedPreview()});document.querySelector('#closeModal').addEventListener('click',closePhoto);document.querySelector('#photoModal').addEventListener('click',e=>{if(e.target.id==='photoModal')closePhoto()});document.querySelector('#printAvailability').addEventListener('click',printAvailability);document.querySelector('#clearWishList').addEventListener('click',clearWishList);document.querySelector('#createWishPdf').addEventListener('click',createWishPdf);document.addEventListener('keydown',e=>{if(e.key==='Escape'){hideFeaturedPreview();closePhoto()}});updateWishBar();load();
 </script></body></html>
