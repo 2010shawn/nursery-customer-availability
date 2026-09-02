@@ -48,11 +48,11 @@ btn.addEventListener('click',async()=>{
       pricing_tier:String(r['Pricing Tier']||r['Pricing Level']).trim(),active:boolVal(r['Active'],true),
       expires_at:String(r['Expires At']||'').trim(),notes:String(r['Notes']||'').trim()||null
     }));
-    if(prices.length!==1333)throw new Error('Expected 1,333 price rows but found '+prices.length+'.');
+    if(prices.length!==1331)throw new Error('Expected 1,331 price rows but found '+prices.length+'.');
     if(customers.length!==2595)throw new Error('Expected 2,595 customer rows but found '+customers.length+'.');
     if(prices.some(x=>!Number.isFinite(x.list_price)||!Number.isFinite(x.tier_2_price)||!Number.isFinite(x.tier_3_price)))throw new Error('One or more price rows contains a missing or invalid price.');
     if(customers.some(x=>!x.access_code))throw new Error('One or more customers is missing an access code.');
-    btn.textContent='Importing…';status.textContent='Validated 1,333 prices and 2,595 customer codes. Importing securely…';
+    btn.textContent='Importing…';status.textContent='Validated 1,331 prices and 2,595 customer codes. Importing securely…';
     const result=await rpc('/rest/v1/rpc/import_pricing_bundle_once',{p_admin_code:adminCode,p_prices:prices,p_customers:customers});
     status.textContent='IMPORT COMPLETE\n\nPrice rows: '+result.price_rows+'\nCustomer access rows: '+result.customer_rows+'\n\nThe one-time importer is now disabled.';
     btn.textContent='Import Complete';document.querySelector('#adminCode').value='';
