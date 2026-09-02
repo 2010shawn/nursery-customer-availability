@@ -13,7 +13,7 @@ button:disabled{opacity:.5}.status{margin-top:18px;padding:12px;border-radius:10
 </head><body><div class="wrap"><div class="card">
 <img src="awg-logo.png" alt="Arizona Wholesale Growers">
 <h1>One-Time Pricing Import</h1>
-<p>This page securely imports the completed AWG Pricing Import Template into Supabase. Customer codes are hashed in the database and are never stored as readable codes.</p>
+<p>This page securely imports the completed AWG Pricing Import Template into Supabase in small batches. Customer codes are hashed in the database and are never stored as readable codes.</p>
 <label for="workbook">Pricing workbook</label><input id="workbook" type="file" accept=".xlsx,.xls">
 <label for="adminCode">One-time import code</label><input id="adminCode" type="password" autocomplete="off">
 <button id="importBtn" type="button">Import Pricing & Customer Access</button>
@@ -52,8 +52,30 @@ btn.addEventListener('click',async()=>{
     if(customers.length!==2595)throw new Error('Expected 2,595 customer rows but found '+customers.length+'.');
     if(prices.some(x=>!Number.isFinite(x.list_price)||!Number.isFinite(x.tier_2_price)||!Number.isFinite(x.tier_3_price)))throw new Error('One or more price rows contains a missing or invalid price.');
     if(customers.some(x=>!x.access_code))throw new Error('One or more customers is missing an access code.');
-    btn.textContent='Importing…';status.textContent='Validated 1,331 prices and 2,595 customer codes. Importing securely…';
-    const result=await rpc('/rest/v1/rpc/import_pricing_bundle_once',{p_admin_code:adminCode,p_prices:prices,p_customers:customers});
+    btn.textContent='Starting secure import…';
+    status.textContent='Validated 1,331 prices and 2,595 customer codes. Preparing secure staged import…';
+
+    await rpc('/rest/v1/rpc/begin_pricing_import',{p_admin_code:adminCode});
+
+    const priceBatchSize=175;
+    let stagedPrices=0;
+    for(let i=0;i<prices.length;i+=priceBatchSize){
+      const batch=prices.slice(i,i+priceBatchSize);
+      status.textContent='Importing prices… '+Math.min(i+batch.length,prices.length)+' of '+prices.length;
+      stagedPrices=await rpc('/rest/v1/rpc/import_price_batch',{p_admin_code:adminCode,p_prices:batch});
+    }
+
+    const customerBatchSize=40;
+    let stagedCustomers=0;
+    for(let i=0;i<customers.length;i+=customerBatchSize){
+      const batch=customers.slice(i,i+customerBatchSize);
+      status.textContent='Securely hashing customer codes… '+Math.min(i+batch.length,customers.length)+' of '+customers.length;
+      stagedCustomers=await rpc('/rest/v1/rpc/import_customer_batch',{p_admin_code:adminCode,p_customers:batch});
+    }
+
+    status.textContent='All rows staged. Finalizing pricing database…';
+    const result=await rpc('/rest/v1/rpc/finalize_pricing_import',{p_admin_code:adminCode});
+
     status.textContent='IMPORT COMPLETE\n\nPrice rows: '+result.price_rows+'\nCustomer access rows: '+result.customer_rows+'\n\nThe one-time importer is now disabled.';
     btn.textContent='Import Complete';document.querySelector('#adminCode').value='';
   }catch(err){status.textContent='Import did not complete.\n\n'+(err.message||err);btn.disabled=false;btn.textContent='Import Pricing & Customer Access'}
