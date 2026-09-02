@@ -11,7 +11,7 @@
 .row{display:grid;grid-template-columns:var(--availability-cols);align-items:stretch;border-top:1px solid #dfe3dc;min-height:80px}
 .row:first-of-type{border-top:0}
 .row>div{padding:10px 9px}
-.facilityPhotos{display:flex;gap:6px;justify-content:center;align-items:center;min-height:78px;background:#fff;padding-left:6px!important;padding-right:6px!important}.row>div:nth-child(2),.row>div:nth-child(3),.row>div:nth-child(4){border-left:1px solid #dfe3dc}.row>div:nth-child(5),.row>div:nth-child(6),.row>div:nth-child(7),.row>div:nth-child(8){border-left:2px solid var(--awg-line)}.row:nth-child(even) .facilityPhotos,.row:nth-child(even)>div:first-child,.row:nth-child(even)>div:nth-child(2),.row:nth-child(even)>div:nth-child(3),.row:nth-child(even)>div:nth-child(4){background:#faf8f0}
+.facilityPhotos{display:flex;gap:6px;justify-content:center;align-items:center;min-height:78px;background:#fff;padding-left:6px!important;padding-right:6px!important}.row>div:nth-child(2),.row>div:nth-child(3),.row>div:nth-child(4){border-left:1px solid #dfe3dc}.row>div:nth-child(5),.row>div:nth-child(6),.row>div:nth-child(7),.row>div:nth-child(8){border-left:2px solid var(--awg-line)}body.pricingActive .row>div:nth-child(5){border-left:1px solid #dfe3dc}body.pricingActive .row>div:nth-child(6),body.pricingActive .row>div:nth-child(7),body.pricingActive .row>div:nth-child(8),body.pricingActive .row>div:nth-child(9){border-left:2px solid var(--awg-line)}.row:nth-child(even) .facilityPhotos,.row:nth-child(even)>div:first-child,.row:nth-child(even)>div:nth-child(2),.row:nth-child(even)>div:nth-child(3),.row:nth-child(even)>div:nth-child(4){background:#faf8f0}
 .bot{font-weight:800;color:var(--awg-green-dark)}.bot.featuredName{position:relative;display:inline-block;cursor:default;border-bottom:1px dotted var(--awg-rust)}.featuredPreview{position:fixed;z-index:70;width:250px;padding:7px;background:#fff;border:1px solid var(--awg-line);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.28);pointer-events:auto}.featuredPreviewClose{position:absolute;right:-10px;top:-10px;width:36px;height:36px;border:0;border-radius:999px;background:#fff;color:#222;font-size:23px;line-height:1;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.28);display:flex;align-items:center;justify-content:center}.featuredPreview[hidden]{display:none}.featuredPreview img{display:block;width:100%;max-height:310px;object-fit:contain;border-radius:8px}.featuredPreviewLabel{padding:6px 3px 1px;font-size:12px;font-weight:750;color:var(--awg-green-dark)}.common{font-size:13px;color:#6a766d}.qty{font-size:20px;font-weight:850}.size{display:inline-block;margin-top:8px;padding:5px 10px;border-radius:999px;font-size:12px;font-weight:800;border:1px solid transparent;white-space:nowrap}
 .size-1g{background:#e8efe6;color:#294c37;border-color:#b9cbb9}
 .size-2g{background:#dfe9d8;color:#35553a;border-color:#b3c7aa}
@@ -26,7 +26,20 @@
 .size-box24{background:#c9b57d;color:#493d25;border-color:#af995e}
 .size-box36{background:#a99863;color:#fff;border-color:#8f7e4d}
 .size-box48{background:#776d4e;color:#fff;border-color:#625a40}
-.size-other{background:#ece7d8;color:#4f5146;border-color:#d1c9b4}.qualityTag{display:inline-flex;align-items:center;justify-content:center;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:800;line-height:1.15;white-space:normal;text-align:center;max-width:100%;box-sizing:border-box;background:#edf2eb;color:var(--awg-green-dark);border:1px solid var(--awg-line)}.hidden{display:none!important}.thumbs{display:flex;gap:8px;align-items:center;justify-content:center}.thumbWrap{display:flex;align-items:center}.thumbLabel{display:none}.thumbBtn{border:0;background:transparent;padding:0;cursor:pointer}.thumb{width:60px;height:48px;object-fit:cover;border-radius:9px;border:1px solid #cfd6cd;display:block}.noPhoto{font-size:11px;color:#7a847c;width:68px;text-align:center}.modal{position:fixed;inset:0;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;padding:24px;z-index:50}.modal[hidden]{display:none}.modalBox{position:relative;max-width:min(920px,95vw);max-height:92vh}.modal img{display:block;max-width:95vw;max-height:88vh;border-radius:14px;background:#fff}.closeModal{position:absolute;right:-10px;top:-10px;width:38px;height:38px;border:0;border-radius:999px;background:#fff;font-size:24px;line-height:1;cursor:pointer;box-shadow:0 3px 14px rgba(0,0,0,.25)}.wishQty{width:58px;min-height:42px;border:1px solid var(--awg-line);border-radius:9px;padding:7px 6px;font:inherit;font-size:16px;text-align:center;background:#fff;color:var(--awg-text)}
+.size-other{background:#ece7d8;color:#4f5146;border-color:#d1c9b4}.qualityTag{display:inline-flex;align-items:center;justify-content:center;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:800;line-height:1.15;white-space:normal;text-align:center;max-width:100%;box-sizing:border-box;background:#edf2eb;color:var(--awg-green-dark);border:1px solid var(--awg-line)}.hidden{display:none!important}.thumbs{display:flex;gap:8px;align-items:center;justify-content:center}.thumbWrap{display:flex;align-items:center}.thumbLabel{display:none}.thumbBtn{border:0;background:transparent;padding:0;cursor:pointer}.thumb{width:60px;height:48px;object-fit:cover;border-radius:9px;border:1px solid #cfd6cd;display:block}.noPhoto{font-size:11px;color:#7a847c;width:68px;text-align:center}.modal{position:fixed;inset:0;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;padding:24px;z-index:50}.modal[hidden]{display:none}.modalBox{position:relative;max-width:min(920px,95vw);max-height:92vh}.modal img{display:block;max-width:95vw;max-height:88vh;border-radius:14px;background:#fff}.closeModal{position:absolute;right:-10px;top:-10px;width:38px;height:38px;border:0;border-radius:999px;background:#fff;font-size:24px;line-height:1;cursor:pointer;box-shadow:0 3px 14px rgba(0,0,0,.25)}
+.pricingBar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 14px;padding:12px 14px;border:1px solid var(--awg-line);border-radius:14px;background:#fff}
+.pricingEntry{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pricingEntry input{min-height:42px;border:1px solid var(--awg-line);border-radius:10px;padding:8px 10px;font:inherit;text-transform:uppercase;min-width:190px}
+.pricingButton{min-height:42px;border:0;border-radius:10px;padding:9px 14px;font:inherit;font-weight:800;cursor:pointer;background:var(--awg-rust);color:#fff}
+.pricingButton.secondary{background:#eee9dc;color:var(--awg-green-dark);border:1px solid var(--awg-line)}
+.pricingStatus{font-size:13px;font-weight:700;color:var(--awg-green-dark)}
+.priceCell,.priceHeader{display:none}
+body.pricingActive .priceCell,body.pricingActive .priceHeader{display:block}
+body.pricingActive .availabilityGrid{--availability-cols:76px 118px minmax(185px,1.08fr) 90px 82px repeat(4,minmax(126px,1fr))}
+.priceValue{font-size:17px;font-weight:900;color:var(--awg-rust);white-space:nowrap}
+.priceMissing{font-size:12px;color:#7a817b}
+@media(max-width:650px){body.pricingActive .availabilityGrid{--availability-cols:76px 118px 190px 90px 82px repeat(4,140px);min-width:1120px}}
+.wishQty{width:58px;min-height:42px;border:1px solid var(--awg-line);border-radius:9px;padding:7px 6px;font:inherit;font-size:16px;text-align:center;background:#fff;color:var(--awg-text)}
 .wishQty:focus{outline:2px solid var(--awg-rust);outline-offset:1px}
 .wishBar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:2px 0 14px;padding:12px 14px;border:1px solid var(--awg-line);border-radius:14px;background:#fff}
 .wishBarText{font-size:13px;color:var(--awg-green-dark);font-weight:700}
@@ -35,7 +48,16 @@
 .wishButton.secondary{background:#eee9dc;color:var(--awg-green-dark);border:1px solid var(--awg-line)}
 .wishButton:disabled{opacity:.48;cursor:not-allowed}.empty{padding:30px;text-align:center;color:#657067}@media(max-width:650px){.tools{grid-template-columns:1fr}.availabilityGrid{--availability-cols:76px 128px 205px 100px repeat(4,148px);min-width:1100px}.stickyBrandBar{min-height:58px;padding:6px 12px}.stickyBrandBar img{height:43px;max-width:245px}.stickyBrandText{font-size:11px}.thumb{width:58px;height:46px}.noPhoto{width:58px}}
 </style></head><body><div class="wrap"><section class="hero"><div class="eyebrow">Arizona Wholesale Growers</div><h1>Current Plant Availability</h1><div id="monthLabel" class="sub">Loading published availability…</div><p class="sub">Current plant availability across our growing facilities. Availability is subject to prior sale and confirmation. Please allow additional time for plants that need to be transferred between our growing facilities.</p></section>
-<div class="tools"><input id="search" placeholder="Search botanical or common name"><select id="size"><option value="">All sizes</option></select><select id="quality"><option value="">All Quality</option><option value="retail">Retail</option><option value="landscape">Landscape</option></select><select id="monthSelect" aria-label="Inventory month"></select></div><div class="wishBar"><div id="wishBarText" class="wishBarText">Wish List: no plants selected</div><div class="wishActions"><button id="printAvailability" class="wishButton secondary" type="button">Print Availability</button><button id="clearWishList" class="wishButton secondary" type="button" disabled>Clear Wish List</button><button id="createWishPdf" class="wishButton" type="button" disabled>Create PDF Wish List</button></div></div><div id="status" class="status"></div><div class="availabilityShell">
+<div class="tools"><input id="search" placeholder="Search botanical or common name"><select id="size"><option value="">All sizes</option></select><select id="quality"><option value="">All Quality</option><option value="retail">Retail</option><option value="landscape">Landscape</option></select><select id="monthSelect" aria-label="Inventory month"></select></div>
+<div class="pricingBar">
+  <div class="pricingEntry">
+    <input id="customerPriceCode" type="text" autocomplete="off" placeholder="Customer pricing code" aria-label="Customer pricing code">
+    <button id="viewPricing" class="pricingButton" type="button">View My Pricing</button>
+    <button id="hidePricing" class="pricingButton secondary" type="button" hidden>Hide Pricing</button>
+  </div>
+  <div id="pricingStatus" class="pricingStatus">Enter your AWG customer code to view your assigned pricing.</div>
+</div>
+<div class="wishBar"><div id="wishBarText" class="wishBarText">Wish List: no plants selected</div><div class="wishActions"><button id="printAvailability" class="wishButton secondary" type="button">Print Availability</button><button id="clearWishList" class="wishButton secondary" type="button" disabled>Clear Wish List</button><button id="createWishPdf" class="wishButton" type="button" disabled>Create PDF Wish List</button></div></div><div id="status" class="status"></div><div class="availabilityShell">
       <div class="availabilityGrid">
         <div class="stickyTableHeader">
           <div class="stickyBrandBar">
@@ -47,6 +69,7 @@
             <div>Quality</div>
             <div>Plant</div>
             <div>Size</div>
+            <div class="priceHeader">Price</div>
             <div><span class="facilityName">Park View</span><div class="photoSubheads"><span>Plant</span><span>Crop</span></div></div>
             <div><span class="facilityName">Camp Verde</span><div class="photoSubheads"><span>Plant</span><span>Crop</span></div></div>
             <div><span class="facilityName">Lake Pleasant</span><div class="photoSubheads"><span>Plant</span><span>Crop</span></div></div>
@@ -59,11 +82,70 @@
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js"></script>
 <script>
-const SUPABASE='https://yaobdnvvkfyzbsvrnxgf.supabase.co';const KEY='sb_publishable_niMYCWNf10L9x0iNMJ4ADw_jwrhdFkP';let rows=[],featuredPhotos=new Map(),wishList=new Map(),currentMonth='';
+const SUPABASE='https://yaobdnvvkfyzbsvrnxgf.supabase.co';const KEY='sb_publishable_niMYCWNf10L9x0iNMJ4ADw_jwrhdFkP';let rows=[],featuredPhotos=new Map(),wishList=new Map(),currentMonth='',priceMapBot=new Map(),priceMapCommon=new Map(),pricingCustomer='',pricingTier='';
 async function api(path,options={}){const h={apikey:KEY,Authorization:'Bearer '+KEY,...(options.headers||{})};const r=await fetch(SUPABASE+path,{...options,headers:h});if(!r.ok)throw new Error(await r.text());return r.json()}
 function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 async function signed(path){if(!path)return '';try{const r=await api('/storage/v1/object/sign/inventory-photos/'+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({expiresIn:3600})});const p=r.signedURL||r.signedUrl;return p?(p.startsWith('http')?p:SUPABASE+(p.startsWith('/storage/v1')?'':'/storage/v1')+p):''}catch(e){console.warn('Photo unavailable',path,e);return ''}}
 function normSize(v){return String(v||'').trim().toLowerCase().replace(/\s+/g,' ')}
+function priceSizeKey(v){
+  let s=normSize(v).replace(/-/g,' ');
+  s=s.replace(/^(\d+)\s*g$/,'$1 gallon').replace(/^(\d+)\s*gal(?:lon)?s?$/,'$1 gallon');
+  const m=s.match(/^(\d+)\s*(?:inch|in|["”])(?:\s*box)?$/);if(m)s=m[1]+' inch box';
+  s=s.replace(/^(\d+)\s*in\s*box$/,'$1 inch box');
+  return s;
+}
+function priceNameKey(v){
+  return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim().replace(/[’‘]/g,"'").replace(/\s+/g,' ');
+}
+function priceFor(item){
+  if(!pricingCustomer)return null;
+  const size=priceSizeKey(item.container_size);
+  const botKey=priceNameKey(item.botanical_name)+'||'+size;
+  if(priceMapBot.has(botKey))return priceMapBot.get(botKey);
+  const commonKey=priceNameKey(item.common_name)+'||'+size;
+  if(priceMapCommon.has(commonKey))return priceMapCommon.get(commonKey);
+  return null;
+}
+function pricingTierLabel(v){return v==='tier_3'?'Tier 3':v==='tier_2'?'Tier 2':'List'}
+async function loginPricing(){
+  const input=document.querySelector('#customerPriceCode');
+  const code=input.value.trim().toUpperCase();
+  const status=document.querySelector('#pricingStatus');
+  if(!code){status.textContent='Enter your AWG customer pricing code.';return}
+  const btn=document.querySelector('#viewPricing');btn.disabled=true;btn.textContent='Checking…';
+  status.textContent='Checking customer pricing access…';
+  try{
+    const data=await api('/rest/v1/rpc/get_customer_price_catalog',{
+      method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({p_code:code})
+    });
+    if(!Array.isArray(data)||!data.length)throw new Error('Invalid or inactive customer code.');
+    priceMapBot.clear();priceMapCommon.clear();
+    pricingCustomer=data[0].customer_name||'';pricingTier=data[0].pricing_tier||'list';
+    data.forEach(r=>{
+      const size=priceSizeKey(r.container_size);
+      const p=Number(r.customer_price);
+      priceMapBot.set(priceNameKey(r.botanical_name)+'||'+size,p);
+      if(r.common_name)priceMapCommon.set(priceNameKey(r.common_name)+'||'+size,p);
+    });
+    document.body.classList.add('pricingActive');
+    document.querySelector('#hidePricing').hidden=false;
+    input.value='';input.hidden=true;btn.hidden=true;
+    status.textContent=pricingCustomer+' · '+pricingTierLabel(pricingTier)+' pricing';
+    render();
+  }catch(err){
+    pricingCustomer='';pricingTier='';priceMapBot.clear();priceMapCommon.clear();
+    document.body.classList.remove('pricingActive');
+    status.textContent='Pricing code was not accepted. Please check the code and try again.';
+  }finally{btn.disabled=false;btn.textContent='View My Pricing'}
+}
+function logoutPricing(){
+  pricingCustomer='';pricingTier='';priceMapBot.clear();priceMapCommon.clear();
+  document.body.classList.remove('pricingActive');
+  const input=document.querySelector('#customerPriceCode'),btn=document.querySelector('#viewPricing');
+  input.hidden=false;btn.hidden=false;document.querySelector('#hidePricing').hidden=true;
+  document.querySelector('#pricingStatus').textContent='Enter your AWG customer code to view your assigned pricing.';
+  render();
+}
 function sizeClass(v){
   const s=normSize(v).replace(/-/g,' ');
   if(/(^| )1 ?gallon|^1 ?g$/.test(s))return 'size-1g';
@@ -348,7 +430,10 @@ async function render(){
     }
     const size=document.createElement('div');
     size.innerHTML=`<span class="size ${sizeClass(item.container_size)}">${esc(item.container_size)}</span>`;
-    d.appendChild(wish);d.appendChild(quality);d.appendChild(plant);d.appendChild(size);
+    const price=document.createElement('div');price.className='priceCell';
+    const itemPrice=priceFor(item);
+    price.innerHTML=itemPrice==null?'<span class="priceMissing">Price unavailable</span>':`<span class="priceValue">$${Number(itemPrice).toFixed(2)}</span>`;
+    d.appendChild(wish);d.appendChild(quality);d.appendChild(plant);d.appendChild(size);d.appendChild(price);
 
     for(const facility of facilityOrder){
       const cell=document.createElement('div');cell.className='facilityPhotos';
@@ -423,5 +508,5 @@ async function load(){
     console.error(e);
   }
 }
-document.querySelector('#search').addEventListener('input',render);document.querySelector('#size').addEventListener('change',render);document.querySelector('#quality').addEventListener('change',render);document.querySelector('#monthSelect').addEventListener('change',e=>loadMonth(e.target.value));document.querySelector('#featuredPreviewClose').addEventListener('click',e=>{e.stopPropagation();hideFeaturedPreview()});document.querySelector('#closeModal').addEventListener('click',closePhoto);document.querySelector('#photoModal').addEventListener('click',e=>{if(e.target.id==='photoModal')closePhoto()});document.querySelector('#printAvailability').addEventListener('click',printAvailability);document.querySelector('#clearWishList').addEventListener('click',clearWishList);document.querySelector('#createWishPdf').addEventListener('click',createWishPdf);document.addEventListener('keydown',e=>{if(e.key==='Escape'){hideFeaturedPreview();closePhoto()}});updateWishBar();load();
+document.querySelector('#viewPricing').addEventListener('click',loginPricing);document.querySelector('#hidePricing').addEventListener('click',logoutPricing);document.querySelector('#customerPriceCode').addEventListener('keydown',e=>{if(e.key==='Enter')loginPricing()});document.querySelector('#search').addEventListener('input',render);document.querySelector('#size').addEventListener('change',render);document.querySelector('#quality').addEventListener('change',render);document.querySelector('#monthSelect').addEventListener('change',e=>loadMonth(e.target.value));document.querySelector('#featuredPreviewClose').addEventListener('click',e=>{e.stopPropagation();hideFeaturedPreview()});document.querySelector('#closeModal').addEventListener('click',closePhoto);document.querySelector('#photoModal').addEventListener('click',e=>{if(e.target.id==='photoModal')closePhoto()});document.querySelector('#printAvailability').addEventListener('click',printAvailability);document.querySelector('#clearWishList').addEventListener('click',clearWishList);document.querySelector('#createWishPdf').addEventListener('click',createWishPdf);document.addEventListener('keydown',e=>{if(e.key==='Escape'){hideFeaturedPreview();closePhoto()}});updateWishBar();load();
 </script></body></html>

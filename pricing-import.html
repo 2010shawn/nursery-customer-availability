@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AWG Pricing Import</title>
+<style>
+:root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;--g:#314d3b;--r:#a65435;--c:#f5f0df;--l:#b9c2b5;color:#26342b;background:var(--c)}
+body{margin:0}.wrap{max-width:760px;margin:40px auto;padding:20px}.card{background:#fff;border:1px solid var(--l);border-radius:20px;padding:24px;box-shadow:0 8px 28px rgba(0,0,0,.08)}
+img{max-width:260px;max-height:70px;object-fit:contain}h1{color:var(--g)}label{display:block;font-weight:800;margin:18px 0 6px}
+input{width:100%;min-height:48px;border:1px solid var(--l);border-radius:10px;padding:9px;font:inherit}
+button{margin-top:18px;min-height:46px;border:0;border-radius:10px;padding:10px 16px;background:var(--r);color:#fff;font:inherit;font-weight:850;cursor:pointer}
+button:disabled{opacity:.5}.status{margin-top:18px;padding:12px;border-radius:10px;background:#eef2ec;font-weight:700;white-space:pre-wrap}.note{font-size:13px;color:#68716a}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head><body><div class="wrap"><div class="card">
+<img src="awg-logo.png" alt="Arizona Wholesale Growers">
+<h1>One-Time Pricing Import</h1>
+<p>This page securely imports the completed AWG Pricing Import Template into Supabase. Customer codes are hashed in the database and are never stored as readable codes.</p>
+<label for="workbook">Pricing workbook</label><input id="workbook" type="file" accept=".xlsx,.xls">
+<label for="adminCode">One-time import code</label><input id="adminCode" type="password" autocomplete="off">
+<button id="importBtn" type="button">Import Pricing & Customer Access</button>
+<div id="status" class="status">Choose the completed workbook and enter the one-time import code.</div>
+<p class="note">The importer automatically disables itself after a successful import.</p>
+</div></div>
+<script>
+const SUPABASE='https://yaobdnvvkfyzbsvrnxgf.supabase.co';
+const KEY='sb_publishable_niMYCWNf10L9x0iNMJ4ADw_jwrhdFkP';
+const status=document.querySelector('#status'),btn=document.querySelector('#importBtn');
+function boolVal(v,def=true){if(v===undefined||v===null||v==='')return def;if(typeof v==='boolean')return v;return String(v).toLowerCase()==='true'||String(v)==='1'}
+async function rpc(path,payload){const r=await fetch(SUPABASE+path,{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+KEY,'Content-Type':'application/json'},body:JSON.stringify(payload)});const txt=await r.text();let data;try{data=txt?JSON.parse(txt):null}catch{data=txt}if(!r.ok)throw new Error(typeof data==='string'?data:(data.message||JSON.stringify(data)));return data}
+btn.addEventListener('click',async()=>{
+  const file=document.querySelector('#workbook').files[0],adminCode=document.querySelector('#adminCode').value.trim();
+  if(!file){status.textContent='Choose the AWG Pricing Import Template first.';return}
+  if(!adminCode){status.textContent='Enter the one-time import code.';return}
+  btn.disabled=true;btn.textContent='Reading workbook…';status.textContent='Reading and validating workbook…';
+  try{
+    const wb=XLSX.read(await file.arrayBuffer(),{type:'array'});
+    const priceSheet=wb.Sheets['Price Catalog Import'],customerSheet=wb.Sheets['Customer Access Setup'];
+    if(!priceSheet||!customerSheet)throw new Error('The workbook must contain Price Catalog Import and Customer Access Setup sheets.');
+    const p=XLSX.utils.sheet_to_json(priceSheet,{defval:''});
+    const c=XLSX.utils.sheet_to_json(customerSheet,{defval:''});
+    const prices=p.filter(r=>r['Botanical Name']).map(r=>({
+      botanical_name:String(r['Botanical Name']).trim(),common_name:String(r['Common Name']||'').trim(),
+      container_size:String(r['Container Size']).trim(),list_price:Number(r['List Price']),
+      tier_2_price:Number(r['Tier 2 Price']),tier_3_price:Number(r['Tier 3 Price']),
+      active:boolVal(r['Active'],true),notes:String(r['Notes']||'').trim()||null
+    }));
+    const customers=c.filter(r=>r['Customer Name']).map(r=>({
+      customer_name:String(r['Customer Name']).trim(),access_code:String(r['Access Code']).trim(),
+      pricing_tier:String(r['Pricing Tier']||r['Pricing Level']).trim(),active:boolVal(r['Active'],true),
+      expires_at:String(r['Expires At']||'').trim(),notes:String(r['Notes']||'').trim()||null
+    }));
+    if(prices.length!==1333)throw new Error('Expected 1,333 price rows but found '+prices.length+'.');
+    if(customers.length!==2595)throw new Error('Expected 2,595 customer rows but found '+customers.length+'.');
+    if(prices.some(x=>!Number.isFinite(x.list_price)||!Number.isFinite(x.tier_2_price)||!Number.isFinite(x.tier_3_price)))throw new Error('One or more price rows contains a missing or invalid price.');
+    if(customers.some(x=>!x.access_code))throw new Error('One or more customers is missing an access code.');
+    btn.textContent='Importing…';status.textContent='Validated 1,333 prices and 2,595 customer codes. Importing securely…';
+    const result=await rpc('/rest/v1/rpc/import_pricing_bundle_once',{p_admin_code:adminCode,p_prices:prices,p_customers:customers});
+    status.textContent='IMPORT COMPLETE\n\nPrice rows: '+result.price_rows+'\nCustomer access rows: '+result.customer_rows+'\n\nThe one-time importer is now disabled.';
+    btn.textContent='Import Complete';document.querySelector('#adminCode').value='';
+  }catch(err){status.textContent='Import did not complete.\n\n'+(err.message||err);btn.disabled=false;btn.textContent='Import Pricing & Customer Access'}
+});
+</script></body></html>
