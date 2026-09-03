@@ -58,7 +58,7 @@ body.pricingActive .availabilityGrid{--availability-cols:76px 118px minmax(175px
     <button id="viewPricing" class="pricingButton" type="button">View My Pricing</button>
     <button id="hidePricing" class="pricingButton secondary" type="button" hidden>Hide Pricing</button>
   </div>
-  <div id="pricingStatus" class="pricingStatus">Enter your AWG customer code to view your assigned pricing.</div><div id="buildMarker" style="font-size:11px;color:#7a817b;margin-left:auto">Build: NOTES-COLUMNS-2026-09-03-D</div>
+  <div id="pricingStatus" class="pricingStatus">Enter your AWG customer code to view your assigned pricing.</div><div id="buildMarker" style="font-size:11px;color:#7a817b;margin-left:auto">Build: WISHLIST-LANDSCAPE-2026-09-03-E</div>
 </div>
 <div class="wishBar"><div id="wishBarText" class="wishBarText">Wish List: no plants selected</div><div class="wishActions"><button id="printAvailability" class="wishButton secondary" type="button">Print Availability</button><button id="clearWishList" class="wishButton secondary" type="button" disabled>Clear Wish List</button><button id="createWishPdf" class="wishButton" type="button" disabled>Create PDF Wish List</button></div></div><div id="status" class="status"></div><div class="availabilityShell">
       <div class="availabilityGrid">
@@ -86,7 +86,7 @@ body.pricingActive .availabilityGrid{--availability-cols:76px 118px minmax(175px
 <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js"></script>
 <script>
 (async()=>{
-  const BUILD='NOTES-COLUMNS-2026-09-03-D';
+  const BUILD='WISHLIST-LANDSCAPE-2026-09-03-E';
   try{
     if('serviceWorker' in navigator){
       const regs=await navigator.serviceWorker.getRegistrations();
@@ -385,7 +385,7 @@ async function createWishPdf(){
   try{
     if(!window.jspdf||!window.jspdf.jsPDF)throw new Error('PDF tools did not load. Please refresh and try again.');
     const {jsPDF}=window.jspdf;
-    const doc=new jsPDF({orientation:'portrait',unit:'pt',format:'letter'});
+    const doc=new jsPDF({orientation:'landscape',unit:'pt',format:'letter'});
     const pageW=doc.internal.pageSize.getWidth();
     let logo=null;
     try{logo=await logoDataUrl()}catch(e){console.warn(e)}
@@ -440,21 +440,21 @@ async function createWishPdf(){
       [['Quantity','Size','Botanical Name','Common Name','Quality','Notes']];
 
     const styles=showPrices?{
-      0:{cellWidth:40,halign:'center'},
-      1:{cellWidth:52},
-      2:{cellWidth:112},
-      3:{cellWidth:99},
-      4:{cellWidth:62},
-      5:{cellWidth:54,halign:'right'},
-      6:{cellWidth:58,halign:'right'},
-      7:{cellWidth:63}
+      0:{cellWidth:64,halign:'center'},
+      1:{cellWidth:72},
+      2:{cellWidth:155},
+      3:{cellWidth:145},
+      4:{cellWidth:88},
+      5:{cellWidth:76,halign:'right'},
+      6:{cellWidth:82,halign:'right'},
+      7:{cellWidth:120}
     }:{
-      0:{cellWidth:48,halign:'center'},
-      1:{cellWidth:58},
-      2:{cellWidth:135},
-      3:{cellWidth:130},
-      4:{cellWidth:78},
-      5:{cellWidth:83}
+      0:{cellWidth:68,halign:'center'},
+      1:{cellWidth:80},
+      2:{cellWidth:190},
+      3:{cellWidth:180},
+      4:{cellWidth:105},
+      5:{cellWidth:140}
     };
 
     doc.autoTable({
@@ -462,7 +462,7 @@ async function createWishPdf(){
       head,
       body,
       theme:'grid',
-      styles:{font:'helvetica',fontSize:showPrices?8:9,cellPadding:showPrices?4.5:6,textColor:[38,52,43],lineColor:[185,194,181],lineWidth:.5,overflow:'linebreak'},
+      styles:{font:'helvetica',fontSize:showPrices?8.7:9.4,cellPadding:showPrices?5.2:6.2,textColor:[38,52,43],lineColor:[185,194,181],lineWidth:.5,overflow:'linebreak'},
       headStyles:{fillColor:[49,77,59],textColor:[255,255,255],fontStyle:'bold',lineColor:[49,77,59]},
       alternateRowStyles:{fillColor:[250,248,240]},
       columnStyles:styles,
