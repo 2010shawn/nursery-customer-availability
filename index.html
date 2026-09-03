@@ -58,7 +58,7 @@ body.pricingActive .availabilityGrid{--availability-cols:76px 118px minmax(185px
     <button id="viewPricing" class="pricingButton" type="button">View My Pricing</button>
     <button id="hidePricing" class="pricingButton secondary" type="button" hidden>Hide Pricing</button>
   </div>
-  <div id="pricingStatus" class="pricingStatus">Enter your AWG customer code to view your assigned pricing.</div><div id="buildMarker" style="font-size:11px;color:#7a817b;margin-left:auto">Build: PRICE-MATCH-2026-09-03-A</div>
+  <div id="pricingStatus" class="pricingStatus">Enter your AWG customer code to view your assigned pricing.</div><div id="buildMarker" style="font-size:11px;color:#7a817b;margin-left:auto">Build: ALPHA-SORT-2026-09-03-B</div>
 </div>
 <div class="wishBar"><div id="wishBarText" class="wishBarText">Wish List: no plants selected</div><div class="wishActions"><button id="printAvailability" class="wishButton secondary" type="button">Print Availability</button><button id="clearWishList" class="wishButton secondary" type="button" disabled>Clear Wish List</button><button id="createWishPdf" class="wishButton" type="button" disabled>Create PDF Wish List</button></div></div><div id="status" class="status"></div><div class="availabilityShell">
       <div class="availabilityGrid">
@@ -86,7 +86,7 @@ body.pricingActive .availabilityGrid{--availability-cols:76px 118px minmax(185px
 <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js"></script>
 <script>
 (async()=>{
-  const BUILD='PRICE-MATCH-2026-09-03-A';
+  const BUILD='ALPHA-SORT-2026-09-03-B';
   try{
     if('serviceWorker' in navigator){
       const regs=await navigator.serviceWorker.getRegistrations();
@@ -104,7 +104,7 @@ body.pricingActive .availabilityGrid{--availability-cols:76px 118px minmax(185px
   }catch(e){console.warn('Cache reset skipped',e)}
 })();
 
-const SUPABASE='https://yaobdnvvkfyzbsvrnxgf.supabase.co';const KEY='sb_publishable_niMYCWNf10L9x0iNMJ4ADw_jwrhdFkP';let rows=[],featuredPhotos=new Map(),wishList=new Map(),currentMonth='',priceMapExact=new Map(),priceMapBot=new Map(),priceMapCommon=new Map(),pricingCustomer='',pricingTier='';
+const SUPABASE='https://yaobdnvvkfyzbsvrnxgf.supabase.co';const KEY='sb_publishable_niMYCWNf10L9x0iNMJ4ADw_jwrhdFkP';let rows=[],featuredPhotos=new Map(),wishList=new Map(),currentMonth='',priceMapExact=new Map(),priceMapBot=new Map(),priceMapCommon=new Map(),pricingCustomer='',pricingTier='',renderSequence=0;
 async function api(path,options={}){const h={apikey:KEY,Authorization:'Bearer '+KEY,...(options.headers||{})};const r=await fetch(SUPABASE+path,{...options,headers:h});if(!r.ok)throw new Error(await r.text());return r.json()}
 function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 async function signed(path){if(!path)return '';try{const r=await api('/storage/v1/object/sign/inventory-photos/'+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({expiresIn:3600})});const p=r.signedURL||r.signedUrl;return p?(p.startsWith('http')?p:SUPABASE+(p.startsWith('/storage/v1')?'':'/storage/v1')+p):''}catch(e){console.warn('Photo unavailable',path,e);return ''}}
@@ -493,11 +493,20 @@ async function createWishPdf(){
   }
 }
 async function render(){
-  const data=filtered(),list=document.querySelector('#list');
+  const myRender=++renderSequence;
+  const data=filtered().slice().sort((a,b)=>{
+    const bot=String(a.botanical_name||'').localeCompare(String(b.botanical_name||''),undefined,{sensitivity:'base'});
+    if(bot)return bot;
+    const common=String(a.common_name||'').localeCompare(String(b.common_name||''),undefined,{sensitivity:'base'});
+    if(common)return common;
+    return String(a.container_size||'').localeCompare(String(b.container_size||''),undefined,{numeric:true,sensitivity:'base'});
+  });
+  const list=document.querySelector('#list');
   list.innerHTML='';
   if(!data.length){list.innerHTML='<div class="empty">No published availability matches these filters.</div>';return}
   const facilityOrder=['Park View','Camp Verde','Lake Pleasant','Rainbow Valley'];
   for(const item of data){
+    if(myRender!==renderSequence)return;
     const d=document.createElement('div');d.className='row';
     const wish=document.createElement('div');
     const qtyInput=document.createElement('input');
@@ -536,7 +545,9 @@ async function render(){
         continue;
       }
       const individualUrl=await signed(rec.individual_photo_path);
+      if(myRender!==renderSequence)return;
       const cropUrl=await signed(rec.crop_photo_path);
+      if(myRender!==renderSequence)return;
       const thumbs=document.createElement('div');thumbs.className='thumbs';
       if(individualUrl){
         const b=document.createElement('button');b.className='thumbBtn';b.type='button';b.setAttribute('aria-label',`View ${facility} individual plant photo`);
@@ -556,6 +567,7 @@ async function render(){
       }
       cell.appendChild(thumbs);d.appendChild(cell);
     }
+    if(myRender!==renderSequence)return;
     list.appendChild(d);
   }
 }
