@@ -1,5 +1,8 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Arizona Wholesale Growers Availability</title>
+<html lang="en"><head>
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Arizona Wholesale Growers Availability</title>
 <style>
 :root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;--awg-green:#314d3b;--awg-green-dark:#20382a;--awg-rust:#a65435;--awg-cream:#f5f0df;--awg-sage:#e7eadf;--awg-line:#b9c2b5;--awg-text:#26342b;color:var(--awg-text);background:var(--awg-cream)}*{box-sizing:border-box}body{margin:0}.wrap{max-width:1120px;margin:auto;padding:28px 18px}.hero{background:var(--awg-green);color:#fff;border:1px solid var(--awg-green-dark);border-radius:22px;padding:24px;margin-bottom:18px}.eyebrow{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#ead7b8}.hero h1{margin:5px 0 7px;font-size:clamp(28px,5vw,46px)}.sub{color:#5c675e}.hero .sub{color:#f0eadb}.tools{display:grid;grid-template-columns:1.45fr .62fr .72fr .72fr;gap:10px;margin:18px 0}.tools input,.tools select{font:inherit;min-height:48px;border:1px solid var(--awg-line);border-radius:12px;padding:10px 12px;background:#fff;color:var(--awg-text)}.status{margin:10px 0 18px;color:var(--awg-green-dark);font-weight:600}.availabilityShell{overflow-x:auto;border:1px solid var(--awg-line);border-radius:18px;background:#fff}@media(min-width:1100px){.availabilityShell{overflow-x:hidden}.availabilityGrid{width:100%;min-width:0}}
 .availabilityGrid{--availability-cols:76px 128px minmax(205px,1.25fr) 100px repeat(4,minmax(138px,1fr));min-width:0}
@@ -55,7 +58,7 @@ body.pricingActive .availabilityGrid{--availability-cols:76px 118px minmax(185px
     <button id="viewPricing" class="pricingButton" type="button">View My Pricing</button>
     <button id="hidePricing" class="pricingButton secondary" type="button" hidden>Hide Pricing</button>
   </div>
-  <div id="pricingStatus" class="pricingStatus">Enter your AWG customer code to view your assigned pricing.</div>
+  <div id="pricingStatus" class="pricingStatus">Enter your AWG customer code to view your assigned pricing.</div><div id="buildMarker" style="font-size:11px;color:#7a817b;margin-left:auto">Build: PRICE-MATCH-2026-09-03-A</div>
 </div>
 <div class="wishBar"><div id="wishBarText" class="wishBarText">Wish List: no plants selected</div><div class="wishActions"><button id="printAvailability" class="wishButton secondary" type="button">Print Availability</button><button id="clearWishList" class="wishButton secondary" type="button" disabled>Clear Wish List</button><button id="createWishPdf" class="wishButton" type="button" disabled>Create PDF Wish List</button></div></div><div id="status" class="status"></div><div class="availabilityShell">
       <div class="availabilityGrid">
@@ -82,6 +85,25 @@ body.pricingActive .availabilityGrid{--availability-cols:76px 118px minmax(185px
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js"></script>
 <script>
+(async()=>{
+  const BUILD='PRICE-MATCH-2026-09-03-A';
+  try{
+    if('serviceWorker' in navigator){
+      const regs=await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map(r=>r.unregister()));
+    }
+    if('caches' in window){
+      const keys=await caches.keys();
+      await Promise.all(keys.map(k=>caches.delete(k)));
+    }
+    const prev=localStorage.getItem('awg_build_marker');
+    if(prev!==BUILD){
+      localStorage.setItem('awg_build_marker',BUILD);
+      sessionStorage.setItem('awg_force_reloaded', '1');
+    }
+  }catch(e){console.warn('Cache reset skipped',e)}
+})();
+
 const SUPABASE='https://yaobdnvvkfyzbsvrnxgf.supabase.co';const KEY='sb_publishable_niMYCWNf10L9x0iNMJ4ADw_jwrhdFkP';let rows=[],featuredPhotos=new Map(),wishList=new Map(),currentMonth='',priceMapExact=new Map(),priceMapBot=new Map(),priceMapCommon=new Map(),pricingCustomer='',pricingTier='';
 async function api(path,options={}){const h={apikey:KEY,Authorization:'Bearer '+KEY,...(options.headers||{})};const r=await fetch(SUPABASE+path,{...options,headers:h});if(!r.ok)throw new Error(await r.text());return r.json()}
 function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
