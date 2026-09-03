@@ -58,7 +58,7 @@ body.pricingActive .availabilityGrid{--availability-cols:76px 118px minmax(175px
     <button id="viewPricing" class="pricingButton" type="button">View My Pricing</button>
     <button id="hidePricing" class="pricingButton secondary" type="button" hidden>Hide Pricing</button>
   </div>
-  <div id="pricingStatus" class="pricingStatus">Enter your AWG customer code to view your assigned pricing.</div><div id="buildMarker" style="font-size:11px;color:#7a817b;margin-left:auto">Build: PRICE-WIDTH-2026-09-03-C</div>
+  <div id="pricingStatus" class="pricingStatus">Enter your AWG customer code to view your assigned pricing.</div><div id="buildMarker" style="font-size:11px;color:#7a817b;margin-left:auto">Build: NOTES-COLUMNS-2026-09-03-D</div>
 </div>
 <div class="wishBar"><div id="wishBarText" class="wishBarText">Wish List: no plants selected</div><div class="wishActions"><button id="printAvailability" class="wishButton secondary" type="button">Print Availability</button><button id="clearWishList" class="wishButton secondary" type="button" disabled>Clear Wish List</button><button id="createWishPdf" class="wishButton" type="button" disabled>Create PDF Wish List</button></div></div><div id="status" class="status"></div><div class="availabilityShell">
       <div class="availabilityGrid">
@@ -86,7 +86,7 @@ body.pricingActive .availabilityGrid{--availability-cols:76px 118px minmax(175px
 <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js"></script>
 <script>
 (async()=>{
-  const BUILD='PRICE-WIDTH-2026-09-03-C';
+  const BUILD='NOTES-COLUMNS-2026-09-03-D';
   try{
     if('serviceWorker' in navigator){
       const regs=await navigator.serviceWorker.getRegistrations();
@@ -314,6 +314,7 @@ function printAvailability(){
       <td>${esc(qualityLabel(item))}</td>
       ${showPrices?`<td class="pricePrint">${p==null?'—':'$'+Number(p).toFixed(2)}</td>`:''}
       <td class="quantityCell"></td>
+      <td class="notesCell"></td>
     </tr>`;
   }).join('');
 
@@ -347,8 +348,9 @@ function printAvailability(){
   th:nth-child(2),td:nth-child(2){min-width:130px;max-width:175px}
   th:nth-child(3),td:nth-child(3){width:76px;white-space:nowrap}
   th:nth-child(4),td:nth-child(4){width:95px;white-space:nowrap}
-  ${showPrices?'th:nth-child(5),td:nth-child(5){width:70px;white-space:nowrap;text-align:right} th:nth-child(6),td:nth-child(6){width:68px}':'th:nth-child(5),td:nth-child(5){width:68px}'}
+  ${showPrices?'th:nth-child(5),td:nth-child(5){width:68px;white-space:nowrap;text-align:right} th:nth-child(6),td:nth-child(6){width:58px} th:nth-child(7),td:nth-child(7){width:96px}':'th:nth-child(5),td:nth-child(5){width:58px} th:nth-child(6),td:nth-child(6){width:105px}'}
   td.quantityCell{height:28px}
+  td.notesCell{height:28px}
   .pricePrint{font-weight:700;color:#a65435}
   .foot{margin-top:10px;font-size:8.5px;color:#6d756f}
 </style>
@@ -364,7 +366,7 @@ function printAvailability(){
   </div>
   <div class="filters">Printed view: ${esc(sizeText)} · ${esc(qualityText)}${searchText?' · Search: '+esc(searchText):''}</div>
   <table>
-    <thead><tr><th>Botanical Name</th><th>Common Name</th><th>Size</th><th>Quality</th>${showPrices?'<th>Price</th>':''}<th>Quantity</th></tr></thead>
+    <thead><tr><th>Botanical Name</th><th>Common Name</th><th>Size</th><th>Quality</th>${showPrices?'<th>Price</th>':''}<th>Quantity</th><th>Notes</th></tr></thead>
     <tbody>${rowsHtml}</tbody>
   </table>
   <div class="foot">Availability is subject to prior sale and confirmation. Please allow additional time for plants that need to be transferred between our growing facilities.</div>
@@ -429,27 +431,30 @@ async function createWishPdf(){
         base.push(unit==null?'—':'$'+Number(unit).toFixed(2));
         base.push(ext==null?'—':'$'+ext.toFixed(2));
       }
+      base.push('');
       return base;
     });
 
     const head=showPrices?
-      [['Quantity','Size','Botanical Name','Common Name','Quality','Unit Price','Extended']]:
-      [['Quantity','Size','Botanical Name','Common Name','Quality']];
+      [['Quantity','Size','Botanical Name','Common Name','Quality','Unit Price','Extended','Notes']]:
+      [['Quantity','Size','Botanical Name','Common Name','Quality','Notes']];
 
     const styles=showPrices?{
-      0:{cellWidth:43,halign:'center'},
-      1:{cellWidth:58},
-      2:{cellWidth:126},
-      3:{cellWidth:113},
-      4:{cellWidth:73},
-      5:{cellWidth:60,halign:'right'},
-      6:{cellWidth:66,halign:'right'}
+      0:{cellWidth:40,halign:'center'},
+      1:{cellWidth:52},
+      2:{cellWidth:112},
+      3:{cellWidth:99},
+      4:{cellWidth:62},
+      5:{cellWidth:54,halign:'right'},
+      6:{cellWidth:58,halign:'right'},
+      7:{cellWidth:63}
     }:{
-      0:{cellWidth:55,halign:'center'},
-      1:{cellWidth:65},
-      2:{cellWidth:150},
-      3:{cellWidth:145},
-      4:{cellWidth:92}
+      0:{cellWidth:48,halign:'center'},
+      1:{cellWidth:58},
+      2:{cellWidth:135},
+      3:{cellWidth:130},
+      4:{cellWidth:78},
+      5:{cellWidth:83}
     };
 
     doc.autoTable({
