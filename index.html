@@ -82,7 +82,7 @@ body.pricingActive .availabilityGrid{--availability-cols:76px 118px minmax(185px
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js"></script>
 <script>
-const SUPABASE='https://yaobdnvvkfyzbsvrnxgf.supabase.co';const KEY='sb_publishable_niMYCWNf10L9x0iNMJ4ADw_jwrhdFkP';let rows=[],featuredPhotos=new Map(),wishList=new Map(),currentMonth='',priceMapBot=new Map(),priceMapCommon=new Map(),pricingCustomer='',pricingTier='';
+const SUPABASE='https://yaobdnvvkfyzbsvrnxgf.supabase.co';const KEY='sb_publishable_niMYCWNf10L9x0iNMJ4ADw_jwrhdFkP';let rows=[],featuredPhotos=new Map(),wishList=new Map(),currentMonth='',priceMapExact=new Map(),priceMapBot=new Map(),priceMapCommon=new Map(),pricingCustomer='',pricingTier='';
 async function api(path,options={}){const h={apikey:KEY,Authorization:'Bearer '+KEY,...(options.headers||{})};const r=await fetch(SUPABASE+path,{...options,headers:h});if(!r.ok)throw new Error(await r.text());return r.json()}
 function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 async function signed(path){if(!path)return '';try{const r=await api('/storage/v1/object/sign/inventory-photos/'+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({expiresIn:3600})});const p=r.signedURL||r.signedUrl;return p?(p.startsWith('http')?p:SUPABASE+(p.startsWith('/storage/v1')?'':'/storage/v1')+p):''}catch(e){console.warn('Photo unavailable',path,e);return ''}}
@@ -100,10 +100,13 @@ function priceNameKey(v){
 function priceFor(item){
   if(!pricingCustomer)return null;
   const size=priceSizeKey(item.container_size);
-  const botKey=priceNameKey(item.botanical_name)+'||'+size;
+  const bot=priceNameKey(item.botanical_name),common=priceNameKey(item.common_name);
+  const exactKey=bot+'||'+common+'||'+size;
+  if(priceMapExact.has(exactKey))return priceMapExact.get(exactKey);
+  const commonKey=common+'||'+size;
+  if(common&&priceMapCommon.has(commonKey))return priceMapCommon.get(commonKey);
+  const botKey=bot+'||'+size;
   if(priceMapBot.has(botKey))return priceMapBot.get(botKey);
-  const commonKey=priceNameKey(item.common_name)+'||'+size;
-  if(priceMapCommon.has(commonKey))return priceMapCommon.get(commonKey);
   return null;
 }
 function pricingTierLabel(v){return v==='tier_3'?'Tier 3':v==='tier_2'?'Tier 2':'List'}
@@ -119,27 +122,39 @@ async function loginPricing(){
       method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({p_code:code})
     });
     if(!Array.isArray(data)||!data.length)throw new Error('Invalid or inactive customer code.');
-    priceMapBot.clear();priceMapCommon.clear();
+    priceMapExact.clear();priceMapBot.clear();priceMapCommon.clear();
     pricingCustomer=data[0].customer_name||'';pricingTier=data[0].pricing_tier||'list';
+    const botCandidates=new Map(),commonCandidates=new Map();
     data.forEach(r=>{
       const size=priceSizeKey(r.container_size);
+      const bot=priceNameKey(r.botanical_name),common=priceNameKey(r.common_name);
       const p=Number(r.customer_price);
-      priceMapBot.set(priceNameKey(r.botanical_name)+'||'+size,p);
-      if(r.common_name)priceMapCommon.set(priceNameKey(r.common_name)+'||'+size,p);
+      if(!Number.isFinite(p))return;
+      priceMapExact.set(bot+'||'+common+'||'+size,p);
+      const bk=bot+'||'+size,ck=common+'||'+size;
+      if(!botCandidates.has(bk))botCandidates.set(bk,new Set());
+      botCandidates.get(bk).add(p);
+      if(common){
+        if(!commonCandidates.has(ck))commonCandidates.set(ck,new Set());
+        commonCandidates.get(ck).add(p);
+      }
     });
+    // Fallback only when a botanical/common+size maps to one unambiguous price.
+    botCandidates.forEach((vals,key)=>{if(vals.size===1)priceMapBot.set(key,[...vals][0])});
+    commonCandidates.forEach((vals,key)=>{if(vals.size===1)priceMapCommon.set(key,[...vals][0])});
     document.body.classList.add('pricingActive');
     document.querySelector('#hidePricing').hidden=false;
     input.value='';input.hidden=true;btn.hidden=true;
     status.textContent=pricingCustomer+' · '+pricingTierLabel(pricingTier)+' pricing';
     render();
   }catch(err){
-    pricingCustomer='';pricingTier='';priceMapBot.clear();priceMapCommon.clear();
+    pricingCustomer='';pricingTier='';priceMapExact.clear();priceMapBot.clear();priceMapCommon.clear();
     document.body.classList.remove('pricingActive');
     status.textContent='Pricing code was not accepted. Please check the code and try again.';
   }finally{btn.disabled=false;btn.textContent='View My Pricing'}
 }
 function logoutPricing(){
-  pricingCustomer='';pricingTier='';priceMapBot.clear();priceMapCommon.clear();
+  pricingCustomer='';pricingTier='';priceMapExact.clear();priceMapBot.clear();priceMapCommon.clear();
   document.body.classList.remove('pricingActive');
   const input=document.querySelector('#customerPriceCode'),btn=document.querySelector('#viewPricing');
   input.hidden=false;btn.hidden=false;document.querySelector('#hidePricing').hidden=true;
