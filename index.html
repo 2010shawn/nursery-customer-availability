@@ -57,8 +57,9 @@ body.pricingActive .availabilityGrid{--availability-cols:76px 118px minmax(175px
     <input id="customerPriceCode" type="text" autocomplete="off" placeholder="Customer pricing code" aria-label="Customer pricing code">
     <button id="viewPricing" class="pricingButton" type="button">View My Pricing</button>
     <button id="hidePricing" class="pricingButton secondary" type="button" hidden>Hide Pricing</button>
+    <button id="openQuoteBuilder" class="pricingButton" type="button" hidden>Create Quote</button>
   </div>
-  <div id="pricingStatus" class="pricingStatus">Enter your AWG customer code to view your assigned pricing.</div><div id="buildMarker" style="font-size:11px;color:#7a817b;margin-left:auto">Build: WISHLIST-LANDSCAPE-2026-09-03-E</div>
+  <div id="pricingStatus" class="pricingStatus">Enter your AWG customer code to view your assigned pricing.</div><div id="buildMarker" style="font-size:11px;color:#7a817b;margin-left:auto">Build: QUOTE-BUILDER-2026-09-09-A</div>
 </div>
 <div class="wishBar"><div id="wishBarText" class="wishBarText">Wish List: no plants selected</div><div class="wishActions"><button id="printAvailability" class="wishButton secondary" type="button">Print Availability</button><button id="clearWishList" class="wishButton secondary" type="button" disabled>Clear Wish List</button><button id="createWishPdf" class="wishButton" type="button" disabled>Create PDF Wish List</button></div></div><div id="status" class="status"></div><div class="availabilityShell">
       <div class="availabilityGrid">
@@ -86,7 +87,7 @@ body.pricingActive .availabilityGrid{--availability-cols:76px 118px minmax(175px
 <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js"></script>
 <script>
 (async()=>{
-  const BUILD='WISHLIST-LANDSCAPE-2026-09-03-E';
+  const BUILD='QUOTE-BUILDER-2026-09-09-A';
   try{
     if('serviceWorker' in navigator){
       const regs=await navigator.serviceWorker.getRegistrations();
@@ -166,6 +167,8 @@ async function loginPricing(){
     commonCandidates.forEach((vals,key)=>{if(vals.size===1)priceMapCommon.set(key,[...vals][0])});
     document.body.classList.add('pricingActive');
     document.querySelector('#hidePricing').hidden=false;
+    document.querySelector('#openQuoteBuilder').hidden=false;
+    sessionStorage.setItem('awgQuoteCode',code);
     input.value='';input.hidden=true;btn.hidden=true;
     status.textContent=pricingCustomer+' · '+pricingTierLabel(pricingTier)+' pricing';
     render();
@@ -178,8 +181,9 @@ async function loginPricing(){
 function logoutPricing(){
   pricingCustomer='';pricingTier='';priceMapExact.clear();priceMapBot.clear();priceMapCommon.clear();
   document.body.classList.remove('pricingActive');
+  sessionStorage.removeItem('awgQuoteCode');
   const input=document.querySelector('#customerPriceCode'),btn=document.querySelector('#viewPricing');
-  input.hidden=false;btn.hidden=false;document.querySelector('#hidePricing').hidden=true;
+  input.hidden=false;btn.hidden=false;document.querySelector('#hidePricing').hidden=true;document.querySelector('#openQuoteBuilder').hidden=true;
   document.querySelector('#pricingStatus').textContent='Enter your AWG customer code to view your assigned pricing.';
   render();
 }
@@ -617,5 +621,5 @@ async function load(){
     console.error(e);
   }
 }
-document.querySelector('#viewPricing').addEventListener('click',loginPricing);document.querySelector('#hidePricing').addEventListener('click',logoutPricing);document.querySelector('#customerPriceCode').addEventListener('keydown',e=>{if(e.key==='Enter')loginPricing()});document.querySelector('#search').addEventListener('input',render);document.querySelector('#size').addEventListener('change',render);document.querySelector('#quality').addEventListener('change',render);document.querySelector('#monthSelect').addEventListener('change',e=>loadMonth(e.target.value));document.querySelector('#featuredPreviewClose').addEventListener('click',e=>{e.stopPropagation();hideFeaturedPreview()});document.querySelector('#closeModal').addEventListener('click',closePhoto);document.querySelector('#photoModal').addEventListener('click',e=>{if(e.target.id==='photoModal')closePhoto()});document.querySelector('#printAvailability').addEventListener('click',printAvailability);document.querySelector('#clearWishList').addEventListener('click',clearWishList);document.querySelector('#createWishPdf').addEventListener('click',createWishPdf);document.addEventListener('keydown',e=>{if(e.key==='Escape'){hideFeaturedPreview();closePhoto()}});updateWishBar();load();
+document.querySelector('#viewPricing').addEventListener('click',loginPricing);document.querySelector('#hidePricing').addEventListener('click',logoutPricing);document.querySelector('#openQuoteBuilder').addEventListener('click',()=>{window.location.href='/quote.html'});document.querySelector('#customerPriceCode').addEventListener('keydown',e=>{if(e.key==='Enter')loginPricing()});document.querySelector('#search').addEventListener('input',render);document.querySelector('#size').addEventListener('change',render);document.querySelector('#quality').addEventListener('change',render);document.querySelector('#monthSelect').addEventListener('change',e=>loadMonth(e.target.value));document.querySelector('#featuredPreviewClose').addEventListener('click',e=>{e.stopPropagation();hideFeaturedPreview()});document.querySelector('#closeModal').addEventListener('click',closePhoto);document.querySelector('#photoModal').addEventListener('click',e=>{if(e.target.id==='photoModal')closePhoto()});document.querySelector('#printAvailability').addEventListener('click',printAvailability);document.querySelector('#clearWishList').addEventListener('click',clearWishList);document.querySelector('#createWishPdf').addEventListener('click',createWishPdf);document.addEventListener('keydown',e=>{if(e.key==='Escape'){hideFeaturedPreview();closePhoto()}});updateWishBar();load();
 </script></body></html>
