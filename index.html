@@ -58,7 +58,7 @@ body.pricingActive .availabilityGrid{--availability-cols:76px 118px minmax(175px
     <button id="viewPricing" class="pricingButton" type="button">View My Pricing</button>
     <button id="hidePricing" class="pricingButton secondary" type="button" hidden>Hide Pricing</button>
   </div>
-  <div id="pricingStatus" class="pricingStatus">Enter your AWG customer code to view your assigned pricing.</div><div id="buildMarker" style="font-size:11px;color:#7a817b;margin-left:auto">Build: WISHLIST-LANDSCAPE-2026-09-03-E</div>
+  <div id="pricingStatus" class="pricingStatus">Enter your AWG customer code to view your assigned pricing.</div><div id="buildMarker" style="font-size:11px;color:#7a817b;margin-left:auto">Build: PHOTO-GUARD-2026-09-16-A</div>
 </div>
 <div class="wishBar"><div id="wishBarText" class="wishBarText">Wish List: no plants selected</div><div class="wishActions"><button id="printAvailability" class="wishButton secondary" type="button">Print Availability</button><button id="clearWishList" class="wishButton secondary" type="button" disabled>Clear Wish List</button><button id="createWishPdf" class="wishButton" type="button" disabled>Create PDF Wish List</button></div></div><div id="status" class="status"></div><div class="availabilityShell">
       <div class="availabilityGrid">
@@ -243,6 +243,7 @@ async function showFeaturedPreview(el,item){
   const f=featuredPhotos.get(listingKey(item));if(!f||!f.individual_photo_path)return;
   const url=await signed(f.individual_photo_path);if(!url)return;
   const preview=document.querySelector('#featuredPreview'),img=document.querySelector('#featuredPreviewImage'),label=document.querySelector('#featuredPreviewLabel');
+  img.onerror=()=>hideFeaturedPreview();
   img.src=url;img.alt=(item.common_name||item.botanical_name)+' featured individual plant';label.textContent=(item.common_name||item.botanical_name)+' · '+item.container_size;
   preview.hidden=false;
   const r=el.getBoundingClientRect(),pw=250,ph=345,margin=12;
@@ -557,6 +558,7 @@ async function render(){
       if(individualUrl){
         const b=document.createElement('button');b.className='thumbBtn';b.type='button';b.setAttribute('aria-label',`View ${facility} individual plant photo`);
         b.innerHTML=`<img class="thumb" src="${individualUrl}" alt="${esc(item.common_name)} individual plant at ${esc(facility)}">`;
+        b.querySelector('img').addEventListener('error',()=>{const n=document.createElement('span');n.className='noPhoto';n.textContent='No plant';b.replaceWith(n)});
         b.addEventListener('click',()=>openPhoto(individualUrl,`${item.common_name||item.botanical_name} — ${facility} — Individual Plant`));
         thumbs.appendChild(b);
       }else{
@@ -565,6 +567,7 @@ async function render(){
       if(cropUrl){
         const b=document.createElement('button');b.className='thumbBtn';b.type='button';b.setAttribute('aria-label',`View ${facility} crop overview photo`);
         b.innerHTML=`<img class="thumb" src="${cropUrl}" alt="${esc(item.common_name)} crop overview at ${esc(facility)}">`;
+        b.querySelector('img').addEventListener('error',()=>{const n=document.createElement('span');n.className='noPhoto';n.textContent='No crop';b.replaceWith(n)});
         b.addEventListener('click',()=>openPhoto(cropUrl,`${item.common_name||item.botanical_name} — ${facility} — Crop Overview`));
         thumbs.appendChild(b);
       }else{
