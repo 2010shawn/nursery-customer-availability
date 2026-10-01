@@ -58,7 +58,7 @@ body.pricingActive .availabilityGrid{--availability-cols:76px 118px minmax(175px
     <button id="viewPricing" class="pricingButton" type="button">View My Pricing</button>
     <button id="hidePricing" class="pricingButton secondary" type="button" hidden>Hide Pricing</button>
   </div>
-  <div id="pricingStatus" class="pricingStatus">Enter your AWG customer code to view your assigned pricing.</div><div id="buildMarker" style="font-size:11px;color:#7a817b;margin-left:auto">Build: PLANT-TYPE-2026-09-24-A</div>
+  <div id="pricingStatus" class="pricingStatus">Enter your AWG customer code to view your assigned pricing.</div><div id="buildMarker" style="font-size:11px;color:#7a817b;margin-left:auto">Build: AVAIL-PAGING-2026-10-01-A</div>
 </div>
 <div class="wishBar"><div id="wishBarText" class="wishBarText">Wish List: no plants selected</div><div class="wishActions"><button id="printAvailability" class="wishButton secondary" type="button">Print Availability</button><button id="clearWishList" class="wishButton secondary" type="button" disabled>Clear Wish List</button><button id="createWishPdf" class="wishButton" type="button" disabled>Create PDF Wish List</button></div></div><div id="status" class="status"></div><div class="availabilityShell">
       <div class="availabilityGrid">
@@ -86,7 +86,7 @@ body.pricingActive .availabilityGrid{--availability-cols:76px 118px minmax(175px
 <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js"></script>
 <script>
 (async()=>{
-  const BUILD='PLANT-TYPE-2026-09-24-A';
+  const BUILD='AVAIL-PAGING-2026-10-01-A';
   try{
     if('serviceWorker' in navigator){
       const regs=await navigator.serviceWorker.getRegistrations();
@@ -238,8 +238,14 @@ function listingKey(v){return [v.botanical_name||'',v.common_name||'',v.containe
 async function loadFeaturedPhotos(month){
   featuredPhotos=new Map();
   try{
-    const data=await api('/rest/v1/featured_inventory_photos?select=*&inventory_month=eq.'+encodeURIComponent(month));
-    for(const f of data||[])featuredPhotos.set(listingKey(f),f);
+    const data=[];
+    const pageSize=500;
+    for(let offset=0;;offset+=pageSize){
+      const page=await api('/rest/v1/featured_inventory_photos?select=*&inventory_month=eq.'+encodeURIComponent(month)+'&order=botanical_name.asc,container_size.asc,facility.asc',{cache:'no-store',headers:{Range:offset+'-'+(offset+pageSize-1),'Range-Unit':'items','Cache-Control':'no-cache'}});
+      data.push(...(page||[]));
+      if(!Array.isArray(page)||page.length<pageSize)break;
+    }
+    for(const f of data)featuredPhotos.set(listingKey(f),f);
   }catch(e){console.warn('Featured photos unavailable',e)}
 }
 function hideFeaturedPreview(){const p=document.querySelector('#featuredPreview');p.hidden=true;document.querySelector('#featuredPreviewImage').src=''}
@@ -589,11 +595,26 @@ function openPhoto(url,label){
   img.src=url;img.alt=label||'Plant photo';modal.hidden=false;document.body.style.overflow='hidden';
 }
 function closePhoto(){document.querySelector('#photoModal').hidden=true;document.querySelector('#modalImage').src='';document.body.style.overflow=''}
+async function loadAllAvailabilityRows(month){
+  const all=[];
+  const pageSize=500;
+  for(let offset=0;;offset+=pageSize){
+    const page=await api(
+      '/rest/v1/customer_availability_snapshots?select=*&snapshot_month=eq.'+encodeURIComponent(month)+'&order=botanical_name.asc,container_size.asc,facility.asc',
+      {cache:'no-store',headers:{Range:offset+'-'+(offset+pageSize-1),'Range-Unit':'items','Cache-Control':'no-cache'}}
+    );
+    if(!Array.isArray(page))throw new Error('Availability response was not a list.');
+    all.push(...page);
+    if(page.length<pageSize)break;
+    if(offset>50000)throw new Error('Availability pagination safety limit reached.');
+  }
+  return all;
+}
 async function loadMonth(m){
   try{
     if(currentMonth&&currentMonth!==m&&wishList.size){wishList.clear();updateWishBar()}
     currentMonth=m;
-    rows=await api('/rest/v1/customer_availability_snapshots?select=*&snapshot_month=eq.'+encodeURIComponent(m)+'&order=botanical_name.asc,container_size.asc');
+    rows=await loadAllAvailabilityRows(m);
     await loadFeaturedPhotos(m);
     document.querySelector('#monthLabel').textContent=new Date(m+'-01T12:00:00').toLocaleDateString(undefined,{month:'long',year:'numeric'})+' Availability';
     const sizeMap=new Map();
@@ -609,7 +630,7 @@ async function loadMonth(m){
 }
 async function load(){
   try{
-    const months=await api('/rest/v1/customer_availability_snapshots?select=snapshot_month&order=snapshot_month.desc');
+    const months=await api('/rest/v1/customer_availability_snapshots?select=snapshot_month&order=snapshot_month.desc&limit=1000',{cache:'no-store'});
     const unique=[...new Set((months||[]).map(r=>r.snapshot_month).filter(Boolean))];
     if(!unique.length){
       document.querySelector('#status').textContent='No availability has been published yet.';
