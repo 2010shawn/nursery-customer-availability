@@ -43,8 +43,11 @@ body.pricingActive .availabilityGrid{--availability-cols:76px 118px minmax(175px
 .priceMissing{font-size:12px;color:#7a817b}
 body.staffMode .priceCell,body.staffMode .priceHeader{display:none!important}
 body.staffMode .availabilityGrid{--availability-cols:76px 128px minmax(205px,1.25fr) 100px repeat(4,minmax(138px,1fr))}
-.staffCounts{margin-top:6px;text-align:center;font-size:15px;font-weight:900;color:var(--awg-green-dark);line-height:1.05}
-.staffCountsLabel{display:block;margin-top:2px;font-size:9px;font-weight:700;color:#6a766d;text-transform:uppercase;letter-spacing:.03em}
+.staffMode .facilityPhotos{flex-direction:column;justify-content:center;align-items:stretch;gap:4px;padding-top:7px!important;padding-bottom:7px!important}
+.staffMode .facilityPhotos .thumbs{width:100%;gap:6px;justify-content:center;flex-wrap:nowrap}
+.staffMode .facilityPhotos .thumb{width:54px;height:44px}
+.staffCounts{width:100%;margin:0;padding-top:4px;border-top:1px solid #e4e8e1;text-align:center;font-size:14px;font-weight:900;color:var(--awg-green-dark);line-height:1;white-space:nowrap}
+.staffCountsLabel{display:inline;margin-left:5px;font-size:8px;font-weight:750;color:#6a766d;text-transform:uppercase;letter-spacing:.02em;white-space:nowrap}
 .staffBadge{display:inline-block;margin-left:8px;padding:4px 8px;border-radius:999px;background:#e8f1e8;color:var(--awg-green-dark);font-size:11px;font-weight:850}
 
 @media(max-width:650px){body.pricingActive .availabilityGrid{--availability-cols:76px 118px 180px 112px 90px repeat(4,140px);min-width:1148px}}
@@ -64,7 +67,7 @@ body.staffMode .availabilityGrid{--availability-cols:76px 128px minmax(205px,1.2
     <button id="viewPricing" class="pricingButton" type="button">View My Pricing</button>
     <button id="hidePricing" class="pricingButton secondary" type="button" hidden>Hide Pricing</button>
   </div>
-  <div id="pricingStatus" class="pricingStatus">Enter your AWG customer code to view your assigned pricing.</div><div id="buildMarker" style="font-size:11px;color:#7a817b;margin-left:auto">Build: SALES-STAFF-2026-10-02-A</div>
+  <div id="pricingStatus" class="pricingStatus">Enter your AWG customer code to view your assigned pricing.</div><div id="buildMarker" style="font-size:11px;color:#7a817b;margin-left:auto">Build: SALES-STAFF-2026-10-02-B</div>
 </div>
 <div class="wishBar"><div id="wishBarText" class="wishBarText">Wish List: no plants selected</div><div class="wishActions"><button id="printAvailability" class="wishButton secondary" type="button">Print Availability</button><button id="clearWishList" class="wishButton secondary" type="button" disabled>Clear Wish List</button><button id="createWishPdf" class="wishButton" type="button" disabled>Create PDF Wish List</button></div></div><div id="status" class="status"></div><div class="availabilityShell">
       <div class="availabilityGrid">
@@ -92,7 +95,7 @@ body.staffMode .availabilityGrid{--availability-cols:76px 128px minmax(205px,1.2
 <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js"></script>
 <script>
 (async()=>{
-  const BUILD='SALES-STAFF-2026-10-02-A';
+  const BUILD='SALES-STAFF-2026-10-02-B';
   try{
     if('serviceWorker' in navigator){
       const regs=await navigator.serviceWorker.getRegistrations();
@@ -577,7 +580,7 @@ async function render(){
       const cell=document.createElement('div');cell.className='facilityPhotos';
       const rec=item.facilities[facility];
       if(!rec){
-        cell.innerHTML=staffMode?'<span class="noPhoto">—</span><div class="staffCounts">0 / 0<span class="staffCountsLabel">Ready / Not Ready</span></div>':'<span class="noPhoto">—</span>';
+        cell.innerHTML='<span class="noPhoto">—</span>';
         d.appendChild(cell);continue;
       }
       const individualUrl=await signed(rec.individual_photo_path);
@@ -604,10 +607,10 @@ async function render(){
         const n=document.createElement('span');n.className='noPhoto';n.textContent='No crop';thumbs.appendChild(n);
       }
       cell.appendChild(thumbs);
-      if(staffMode){
+      if(staffMode&&(individualUrl||cropUrl)){
         const counts=document.createElement('div');counts.className='staffCounts';
         counts.textContent=Number(rec.ready_count||0).toLocaleString()+' / '+Number(rec.not_ready_count||0).toLocaleString();
-        const label=document.createElement('span');label.className='staffCountsLabel';label.textContent='Ready / Not Ready';
+        const label=document.createElement('span');label.className='staffCountsLabel';label.textContent='R / NR';
         counts.appendChild(label);cell.appendChild(counts);
       }
       d.appendChild(cell);
