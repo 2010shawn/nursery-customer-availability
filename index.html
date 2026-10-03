@@ -41,6 +41,12 @@ body.pricingActive .priceCell,body.pricingActive .priceHeader{display:block}
 body.pricingActive .availabilityGrid{--availability-cols:76px 118px minmax(175px,1.04fr) 112px 90px repeat(4,minmax(126px,1fr))}
 .priceValue{display:block;font-size:17px;font-weight:900;color:var(--awg-rust);white-space:nowrap;overflow:visible}
 .priceMissing{font-size:12px;color:#7a817b}
+body.staffMode .priceCell,body.staffMode .priceHeader{display:none!important}
+body.staffMode .availabilityGrid{--availability-cols:76px 128px minmax(205px,1.25fr) 100px repeat(4,minmax(138px,1fr))}
+.staffCounts{margin-top:6px;text-align:center;font-size:15px;font-weight:900;color:var(--awg-green-dark);line-height:1.05}
+.staffCountsLabel{display:block;margin-top:2px;font-size:9px;font-weight:700;color:#6a766d;text-transform:uppercase;letter-spacing:.03em}
+.staffBadge{display:inline-block;margin-left:8px;padding:4px 8px;border-radius:999px;background:#e8f1e8;color:var(--awg-green-dark);font-size:11px;font-weight:850}
+
 @media(max-width:650px){body.pricingActive .availabilityGrid{--availability-cols:76px 118px 180px 112px 90px repeat(4,140px);min-width:1148px}}
 .wishQty{width:58px;min-height:42px;border:1px solid var(--awg-line);border-radius:9px;padding:7px 6px;font:inherit;font-size:16px;text-align:center;background:#fff;color:var(--awg-text)}
 .wishQty:focus{outline:2px solid var(--awg-rust);outline-offset:1px}
@@ -58,7 +64,7 @@ body.pricingActive .availabilityGrid{--availability-cols:76px 118px minmax(175px
     <button id="viewPricing" class="pricingButton" type="button">View My Pricing</button>
     <button id="hidePricing" class="pricingButton secondary" type="button" hidden>Hide Pricing</button>
   </div>
-  <div id="pricingStatus" class="pricingStatus">Enter your AWG customer code to view your assigned pricing.</div><div id="buildMarker" style="font-size:11px;color:#7a817b;margin-left:auto">Build: AVAIL-PAGING-2026-10-01-A</div>
+  <div id="pricingStatus" class="pricingStatus">Enter your AWG customer code to view your assigned pricing.</div><div id="buildMarker" style="font-size:11px;color:#7a817b;margin-left:auto">Build: SALES-STAFF-2026-10-02-A</div>
 </div>
 <div class="wishBar"><div id="wishBarText" class="wishBarText">Wish List: no plants selected</div><div class="wishActions"><button id="printAvailability" class="wishButton secondary" type="button">Print Availability</button><button id="clearWishList" class="wishButton secondary" type="button" disabled>Clear Wish List</button><button id="createWishPdf" class="wishButton" type="button" disabled>Create PDF Wish List</button></div></div><div id="status" class="status"></div><div class="availabilityShell">
       <div class="availabilityGrid">
@@ -86,7 +92,7 @@ body.pricingActive .availabilityGrid{--availability-cols:76px 118px minmax(175px
 <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js"></script>
 <script>
 (async()=>{
-  const BUILD='AVAIL-PAGING-2026-10-01-A';
+  const BUILD='SALES-STAFF-2026-10-02-A';
   try{
     if('serviceWorker' in navigator){
       const regs=await navigator.serviceWorker.getRegistrations();
@@ -104,7 +110,7 @@ body.pricingActive .availabilityGrid{--availability-cols:76px 118px minmax(175px
   }catch(e){console.warn('Cache reset skipped',e)}
 })();
 
-const SUPABASE='https://yaobdnvvkfyzbsvrnxgf.supabase.co';const KEY='sb_publishable_niMYCWNf10L9x0iNMJ4ADw_jwrhdFkP';let rows=[],featuredPhotos=new Map(),wishList=new Map(),currentMonth='',priceMapExact=new Map(),priceMapBot=new Map(),priceMapCommon=new Map(),pricingCustomer='',pricingTier='',renderSequence=0;
+const SUPABASE='https://yaobdnvvkfyzbsvrnxgf.supabase.co';const KEY='sb_publishable_niMYCWNf10L9x0iNMJ4ADw_jwrhdFkP';let rows=[],customerRows=[],staffRows=[],staffMode=false,staffCode='',featuredPhotos=new Map(),wishList=new Map(),currentMonth='',priceMapExact=new Map(),priceMapBot=new Map(),priceMapCommon=new Map(),pricingCustomer='',pricingTier='',renderSequence=0;
 async function api(path,options={}){const h={apikey:KEY,Authorization:'Bearer '+KEY,...(options.headers||{})};const r=await fetch(SUPABASE+path,{...options,headers:h});if(!r.ok)throw new Error(await r.text());return r.json()}
 function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 async function signed(path){if(!path)return '';try{const r=await api('/storage/v1/object/sign/inventory-photos/'+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({expiresIn:3600})});const p=r.signedURL||r.signedUrl;return p?(p.startsWith('http')?p:SUPABASE+(p.startsWith('/storage/v1')?'':'/storage/v1')+p):''}catch(e){console.warn('Photo unavailable',path,e);return ''}}
@@ -138,49 +144,63 @@ async function loginPricing(){
   const status=document.querySelector('#pricingStatus');
   if(!code){status.textContent='Enter your AWG customer pricing code.';return}
   const btn=document.querySelector('#viewPricing');btn.disabled=true;btn.textContent='Checking…';
-  status.textContent='Checking customer pricing access…';
+  status.textContent='Checking customer access…';
   try{
+    const validation=await api('/rest/v1/rpc/validate_customer_price_code',{
+      method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({p_code:code})
+    });
+    if(!Array.isArray(validation)||!validation.length)throw new Error('Invalid or inactive customer code.');
+    const access=validation[0];
+    if(access.pricing_tier==='staff_inventory'){
+      pricingCustomer=access.customer_name||'AWG Sales Staff';pricingTier='staff_inventory';
+      priceMapExact.clear();priceMapBot.clear();priceMapCommon.clear();
+      staffMode=true;staffCode=code;
+      document.body.classList.remove('pricingActive');
+      document.body.classList.add('staffMode');
+      document.querySelector('#hidePricing').hidden=false;
+      input.value='';input.hidden=true;btn.hidden=true;
+      status.innerHTML=esc(pricingCustomer)+' <span class="staffBadge">Sales Staff View</span> · Ready / Not Ready quantities shown by facility · Prices hidden';
+      await loadStaffMonth(currentMonth||document.querySelector('#monthSelect').value);
+      return;
+    }
     const data=await api('/rest/v1/rpc/get_customer_price_catalog',{
       method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({p_code:code})
     });
     if(!Array.isArray(data)||!data.length)throw new Error('Invalid or inactive customer code.');
+    staffMode=false;staffCode='';document.body.classList.remove('staffMode');
     priceMapExact.clear();priceMapBot.clear();priceMapCommon.clear();
     pricingCustomer=data[0].customer_name||'';pricingTier=data[0].pricing_tier||'list';
     const botCandidates=new Map(),commonCandidates=new Map();
     data.forEach(r=>{
       const size=priceSizeKey(r.container_size);
       const bot=priceNameKey(r.botanical_name),common=priceNameKey(r.common_name);
-      const p=Number(r.customer_price);
-      if(!Number.isFinite(p))return;
+      const p=Number(r.customer_price);if(!Number.isFinite(p))return;
       priceMapExact.set(bot+'||'+common+'||'+size,p);
       const bk=bot+'||'+size,ck=common+'||'+size;
-      if(!botCandidates.has(bk))botCandidates.set(bk,new Set());
-      botCandidates.get(bk).add(p);
-      if(common){
-        if(!commonCandidates.has(ck))commonCandidates.set(ck,new Set());
-        commonCandidates.get(ck).add(p);
-      }
+      if(!botCandidates.has(bk))botCandidates.set(bk,new Set());botCandidates.get(bk).add(p);
+      if(common){if(!commonCandidates.has(ck))commonCandidates.set(ck,new Set());commonCandidates.get(ck).add(p)}
     });
-    // Fallback only when a botanical/common+size maps to one unambiguous price.
     botCandidates.forEach((vals,key)=>{if(vals.size===1)priceMapBot.set(key,[...vals][0])});
     commonCandidates.forEach((vals,key)=>{if(vals.size===1)priceMapCommon.set(key,[...vals][0])});
-    document.body.classList.add('pricingActive');
-    document.querySelector('#hidePricing').hidden=false;
-    input.value='';input.hidden=true;btn.hidden=true;
+    document.body.classList.add('pricingActive');document.body.classList.remove('staffMode');
+    document.querySelector('#hidePricing').hidden=false;input.value='';input.hidden=true;btn.hidden=true;
     status.textContent=pricingCustomer+' · '+pricingTierLabel(pricingTier)+' pricing';
     render();
   }catch(err){
-    pricingCustomer='';pricingTier='';priceMapExact.clear();priceMapBot.clear();priceMapCommon.clear();
-    document.body.classList.remove('pricingActive');
+    staffMode=false;staffCode='';pricingCustomer='';pricingTier='';
+    priceMapExact.clear();priceMapBot.clear();priceMapCommon.clear();
+    document.body.classList.remove('pricingActive','staffMode');
     status.textContent='Pricing code was not accepted. Please check the code and try again.';
   }finally{btn.disabled=false;btn.textContent='View My Pricing'}
 }
 function logoutPricing(){
+  staffMode=false;staffCode='';staffRows=[];rows=customerRows.slice();
   pricingCustomer='';pricingTier='';priceMapExact.clear();priceMapBot.clear();priceMapCommon.clear();
-  document.body.classList.remove('pricingActive');
+  document.body.classList.remove('pricingActive','staffMode');
   const input=document.querySelector('#customerPriceCode'),btn=document.querySelector('#viewPricing');
   input.hidden=false;btn.hidden=false;document.querySelector('#hidePricing').hidden=true;
   document.querySelector('#pricingStatus').textContent='Enter your AWG customer code to view your assigned pricing.';
+  if(!staffMode)document.querySelector('#status').textContent=groupListings(rows).length+' plant/size combinations currently listed.';
   render();
 }
 function sizeClass(v){
@@ -551,15 +571,14 @@ async function render(){
     const price=document.createElement('div');price.className='priceCell';
     const itemPrice=priceFor(item);
     price.innerHTML=itemPrice==null?'<span class="priceMissing">Price unavailable</span>':`<span class="priceValue">$${Number(itemPrice).toFixed(2)}</span>`;
-    d.appendChild(wish);d.appendChild(quality);d.appendChild(plant);d.appendChild(size);d.appendChild(price);
+    d.appendChild(wish);d.appendChild(quality);d.appendChild(plant);d.appendChild(size);if(!staffMode)d.appendChild(price);
 
     for(const facility of facilityOrder){
       const cell=document.createElement('div');cell.className='facilityPhotos';
       const rec=item.facilities[facility];
       if(!rec){
-        cell.innerHTML='<span class="noPhoto">—</span>';
-        d.appendChild(cell);
-        continue;
+        cell.innerHTML=staffMode?'<span class="noPhoto">—</span><div class="staffCounts">0 / 0<span class="staffCountsLabel">Ready / Not Ready</span></div>':'<span class="noPhoto">—</span>';
+        d.appendChild(cell);continue;
       }
       const individualUrl=await signed(rec.individual_photo_path);
       if(myRender!==renderSequence)return;
@@ -584,7 +603,14 @@ async function render(){
       }else{
         const n=document.createElement('span');n.className='noPhoto';n.textContent='No crop';thumbs.appendChild(n);
       }
-      cell.appendChild(thumbs);d.appendChild(cell);
+      cell.appendChild(thumbs);
+      if(staffMode){
+        const counts=document.createElement('div');counts.className='staffCounts';
+        counts.textContent=Number(rec.ready_count||0).toLocaleString()+' / '+Number(rec.not_ready_count||0).toLocaleString();
+        const label=document.createElement('span');label.className='staffCountsLabel';label.textContent='Ready / Not Ready';
+        counts.appendChild(label);cell.appendChild(counts);
+      }
+      d.appendChild(cell);
     }
     if(myRender!==renderSequence)return;
     list.appendChild(d);
@@ -610,11 +636,26 @@ async function loadAllAvailabilityRows(month){
   }
   return all;
 }
+async function loadStaffMonth(m){
+  if(!staffMode||!staffCode||!m)return;
+  const data=await api('/rest/v1/rpc/get_staff_inventory',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({p_code:staffCode,p_month:m})
+  });
+  staffRows=Array.isArray(data)?data:[];
+  rows=staffRows;
+  document.querySelector('#status').textContent=groupListings(rows).length+' plant/size combinations in Sales Staff View.';
+  render();
+}
 async function loadMonth(m){
   try{
     if(currentMonth&&currentMonth!==m&&wishList.size){wishList.clear();updateWishBar()}
     currentMonth=m;
-    rows=await loadAllAvailabilityRows(m);
+    customerRows=await loadAllAvailabilityRows(m);
+    rows=customerRows;
+    if(staffMode&&staffCode){
+      await loadStaffMonth(m);
+    }
     await loadFeaturedPhotos(m);
     document.querySelector('#monthLabel').textContent=new Date(m+'-01T12:00:00').toLocaleDateString(undefined,{month:'long',year:'numeric'})+' Availability';
     const sizeMap=new Map();
