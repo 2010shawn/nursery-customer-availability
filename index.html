@@ -67,7 +67,7 @@ body.staffMode .availabilityGrid{--availability-cols:76px 128px minmax(205px,1.2
     <button id="viewPricing" class="pricingButton" type="button">View My Pricing</button>
     <button id="hidePricing" class="pricingButton secondary" type="button" hidden>Hide Pricing</button>
   </div>
-  <div id="pricingStatus" class="pricingStatus">Enter your AWG customer code to view your assigned pricing.</div><div id="buildMarker" style="font-size:11px;color:#7a817b;margin-left:auto">Build: PAGINATION-AUDIT-2026-10-06-A</div>
+  <div id="pricingStatus" class="pricingStatus">Enter your AWG customer code to view your assigned pricing.</div><div id="buildMarker" style="font-size:11px;color:#7a817b;margin-left:auto">Build: PRICING-LOGIN-FIX-2026-10-06-A</div>
 </div>
 <div class="wishBar"><div id="wishBarText" class="wishBarText">Wish List: no plants selected</div><div class="wishActions"><button id="printAvailability" class="wishButton secondary" type="button">Print Availability</button><button id="clearWishList" class="wishButton secondary" type="button" disabled>Clear Wish List</button><button id="createWishPdf" class="wishButton" type="button" disabled>Create PDF Wish List</button></div></div><div id="status" class="status"></div><div class="availabilityShell">
       <div class="availabilityGrid">
@@ -95,7 +95,7 @@ body.staffMode .availabilityGrid{--availability-cols:76px 128px minmax(205px,1.2
 <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js"></script>
 <script>
 (async()=>{
-  const BUILD='PAGINATION-AUDIT-2026-10-06-A';
+  const BUILD='PRICING-LOGIN-FIX-2026-10-06-A';
   try{
     if('serviceWorker' in navigator){
       const regs=await navigator.serviceWorker.getRegistrations();
@@ -115,21 +115,6 @@ body.staffMode .availabilityGrid{--availability-cols:76px 128px minmax(205px,1.2
 
 const SUPABASE='https://yaobdnvvkfyzbsvrnxgf.supabase.co';const KEY='sb_publishable_niMYCWNf10L9x0iNMJ4ADw_jwrhdFkP';let rows=[],customerRows=[],staffRows=[],staffMode=false,staffCode='',featuredPhotos=new Map(),wishList=new Map(),currentMonth='',priceMapExact=new Map(),priceMapBot=new Map(),priceMapCommon=new Map(),pricingCustomer='',pricingTier='',renderSequence=0;
 async function api(path,options={}){const h={apikey:KEY,Authorization:'Bearer '+KEY,...(options.headers||{})};const r=await fetch(SUPABASE+path,{...options,headers:h});if(!r.ok)throw new Error(await r.text());return r.json()}
-async function pagedRpc(path,body,pageSize=500){
-  const all=[];
-  for(let offset=0;;offset+=pageSize){
-    const page=await api(path,{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Range':offset+'-'+(offset+pageSize-1),'Range-Unit':'items','Prefer':'count=none'},
-      body:JSON.stringify(body)
-    });
-    if(!Array.isArray(page))throw new Error('Paged RPC response was not a list.');
-    all.push(...page);
-    if(page.length<pageSize)break;
-    if(offset>50000)throw new Error('RPC pagination safety limit reached.');
-  }
-  return all;
-}
 function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 async function signed(path){if(!path)return '';try{const r=await api('/storage/v1/object/sign/inventory-photos/'+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({expiresIn:3600})});const p=r.signedURL||r.signedUrl;return p?(p.startsWith('http')?p:SUPABASE+(p.startsWith('/storage/v1')?'':'/storage/v1')+p):''}catch(e){console.warn('Photo unavailable',path,e);return ''}}
 function normSize(v){return String(v||'').trim().toLowerCase().replace(/\s+/g,' ')}
@@ -181,7 +166,9 @@ async function loginPricing(){
       await loadStaffMonth(currentMonth||document.querySelector('#monthSelect').value);
       return;
     }
-    const data=await pagedRpc('/rest/v1/rpc/get_customer_price_catalog',{p_code:code});
+    const data=await api('/rest/v1/rpc/get_customer_price_catalog',{
+      method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({p_code:code})
+    });
     if(!Array.isArray(data)||!data.length)throw new Error('Invalid or inactive customer code.');
     staffMode=false;staffCode='';document.body.classList.remove('staffMode');
     priceMapExact.clear();priceMapBot.clear();priceMapCommon.clear();
