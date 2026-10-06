@@ -67,7 +67,7 @@ body.staffMode .availabilityGrid{--availability-cols:76px 128px minmax(205px,1.2
     <button id="viewPricing" class="pricingButton" type="button">View My Pricing</button>
     <button id="hidePricing" class="pricingButton secondary" type="button" hidden>Hide Pricing</button>
   </div>
-  <div id="pricingStatus" class="pricingStatus">Enter your AWG customer code to view your assigned pricing.</div><div id="buildMarker" style="font-size:11px;color:#7a817b;margin-left:auto">Build: SALES-STAFF-2026-10-02-B</div>
+  <div id="pricingStatus" class="pricingStatus">Enter your AWG customer code to view your assigned pricing.</div><div id="buildMarker" style="font-size:11px;color:#7a817b;margin-left:auto">Build: STAFF-PAGING-2026-10-06-A</div>
 </div>
 <div class="wishBar"><div id="wishBarText" class="wishBarText">Wish List: no plants selected</div><div class="wishActions"><button id="printAvailability" class="wishButton secondary" type="button">Print Availability</button><button id="clearWishList" class="wishButton secondary" type="button" disabled>Clear Wish List</button><button id="createWishPdf" class="wishButton" type="button" disabled>Create PDF Wish List</button></div></div><div id="status" class="status"></div><div class="availabilityShell">
       <div class="availabilityGrid">
@@ -95,7 +95,7 @@ body.staffMode .availabilityGrid{--availability-cols:76px 128px minmax(205px,1.2
 <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js"></script>
 <script>
 (async()=>{
-  const BUILD='SALES-STAFF-2026-10-02-B';
+  const BUILD='STAFF-PAGING-2026-10-06-A';
   try{
     if('serviceWorker' in navigator){
       const regs=await navigator.serviceWorker.getRegistrations();
@@ -641,11 +641,25 @@ async function loadAllAvailabilityRows(month){
 }
 async function loadStaffMonth(m){
   if(!staffMode||!staffCode||!m)return;
-  const data=await api('/rest/v1/rpc/get_staff_inventory',{
-    method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({p_code:staffCode,p_month:m})
-  });
-  staffRows=Array.isArray(data)?data:[];
+  const all=[];
+  const pageSize=500;
+  for(let offset=0;;offset+=pageSize){
+    const page=await api('/rest/v1/rpc/get_staff_inventory',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'Range':offset+'-'+(offset+pageSize-1),
+        'Range-Unit':'items',
+        'Prefer':'count=none'
+      },
+      body:JSON.stringify({p_code:staffCode,p_month:m})
+    });
+    if(!Array.isArray(page))throw new Error('Staff inventory response was not a list.');
+    all.push(...page);
+    if(page.length<pageSize)break;
+    if(offset>50000)throw new Error('Staff inventory pagination safety limit reached.');
+  }
+  staffRows=all;
   rows=staffRows;
   document.querySelector('#status').textContent=groupListings(rows).length+' plant/size combinations in Sales Staff View.';
   render();
