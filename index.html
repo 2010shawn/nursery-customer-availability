@@ -67,7 +67,7 @@ body.staffMode .availabilityGrid{--availability-cols:76px 128px minmax(205px,1.2
     <button id="viewPricing" class="pricingButton" type="button">View My Pricing</button>
     <button id="hidePricing" class="pricingButton secondary" type="button" hidden>Hide Pricing</button>
   </div>
-  <div id="pricingStatus" class="pricingStatus">Enter your AWG customer code to view your assigned pricing.</div><div id="buildMarker" style="font-size:11px;color:#7a817b;margin-left:auto">Build: STAFF-COUNTS-FIX-2026-10-06-A</div>
+  <div id="pricingStatus" class="pricingStatus">Enter your AWG customer code to view your assigned pricing.</div><div id="buildMarker" style="font-size:11px;color:#7a817b;margin-left:auto">Build: SIZE-9CM-2026-10-08-A</div>
 </div>
 <div class="wishBar"><div id="wishBarText" class="wishBarText">Wish List: no plants selected</div><div class="wishActions"><button id="printAvailability" class="wishButton secondary" type="button">Print Availability</button><button id="clearWishList" class="wishButton secondary" type="button" disabled>Clear Wish List</button><button id="createWishPdf" class="wishButton" type="button" disabled>Create PDF Wish List</button></div></div><div id="status" class="status"></div><div class="availabilityShell">
       <div class="availabilityGrid">
@@ -95,7 +95,7 @@ body.staffMode .availabilityGrid{--availability-cols:76px 128px minmax(205px,1.2
 <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js"></script>
 <script>
 (async()=>{
-  const BUILD='STAFF-COUNTS-FIX-2026-10-06-A';
+  const BUILD='SIZE-9CM-2026-10-08-A';
   try{
     if('serviceWorker' in navigator){
       const regs=await navigator.serviceWorker.getRegistrations();
@@ -672,6 +672,7 @@ async function loadMonth(m){
     document.querySelector('#monthLabel').textContent=new Date(m+'-01T12:00:00').toLocaleDateString(undefined,{month:'long',year:'numeric'})+' Availability';
     const sizeMap=new Map();
     rows.forEach(r=>{const label=String(r.container_size||'').trim();if(label&&!sizeMap.has(normSize(label)))sizeMap.set(normSize(label),label)});
+    if(!sizeMap.has('9cm'))sizeMap.set('9cm','9cm');
     const sizes=[...sizeMap.values()];
     document.querySelector('#size').innerHTML='<option value="">All sizes</option>'+sizes.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('');
     document.querySelector('#status').textContent=groupListings(rows).length+' plant/size combinations currently listed.';
