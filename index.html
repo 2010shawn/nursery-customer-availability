@@ -332,7 +332,7 @@ function printAvailability(){
     return;
   }
 
-  const showPrices=!!pricingCustomer;
+  const showPrices=!!pricingCustomer&&!staffMode;
   const monthText=document.querySelector('#monthSelect').selectedOptions[0]?.textContent||'';
   const typeText=document.querySelector('#plantType').selectedOptions[0]?.textContent||'All Plants';
   const qualityText=document.querySelector('#quality').selectedOptions[0]?.textContent||'All Quality';
@@ -413,7 +413,7 @@ function printAvailability(){
 async function createWishPdf(){
   const selected=[...wishList.values()].filter(x=>Number(x.quantity)>0);
   if(!selected.length)return;
-  const showPrices=!!pricingCustomer;
+  const showPrices=!!pricingCustomer&&!staffMode;
   const btn=document.querySelector('#createWishPdf');
   const original=btn.textContent;
   btn.disabled=true;btn.textContent='Creating PDF...';
