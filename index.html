@@ -67,7 +67,7 @@ body.staffMode .availabilityGrid{--availability-cols:76px 128px minmax(205px,1.2
     <button id="viewPricing" class="pricingButton" type="button">View My Pricing</button>
     <button id="hidePricing" class="pricingButton secondary" type="button" hidden>Hide Pricing</button>
   </div>
-  <div id="pricingStatus" class="pricingStatus">Enter your AWG customer code to view your assigned pricing.</div><div id="buildMarker" style="font-size:11px;color:#7a817b;margin-left:auto">Build: SIZE-9CM-2026-10-08-A</div>
+  <div id="pricingStatus" class="pricingStatus">Enter your AWG customer code to view your assigned pricing.</div><div id="buildMarker" style="font-size:11px;color:#7a817b;margin-left:auto">Build: CURRENT-MONTH-2026-10-19-A</div>
 </div>
 <div class="wishBar"><div id="wishBarText" class="wishBarText">Wish List: no plants selected</div><div class="wishActions"><button id="printAvailability" class="wishButton secondary" type="button">Print Availability</button><button id="clearWishList" class="wishButton secondary" type="button" disabled>Clear Wish List</button><button id="createWishPdf" class="wishButton" type="button" disabled>Create PDF Wish List</button></div></div><div id="status" class="status"></div><div class="availabilityShell">
       <div class="availabilityGrid">
@@ -95,7 +95,7 @@ body.staffMode .availabilityGrid{--availability-cols:76px 128px minmax(205px,1.2
 <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js"></script>
 <script>
 (async()=>{
-  const BUILD='SIZE-9CM-2026-10-08-A';
+  const BUILD='CURRENT-MONTH-2026-10-19-A';
   try{
     if('serviceWorker' in navigator){
       const regs=await navigator.serviceWorker.getRegistrations();
@@ -706,8 +706,14 @@ async function load(){
     }
     const sel=document.querySelector('#monthSelect');
     sel.innerHTML=unique.map(m=>`<option value="${esc(m)}">${new Date(m+'-01T12:00:00').toLocaleDateString(undefined,{month:'long',year:'numeric'})}</option>`).join('');
-    sel.value=unique[0];
-    await loadMonth(unique[0]);
+    // Default to the current local calendar month when published; otherwise use
+    // the latest published month not later than today, or the earliest future month.
+    const now=new Date();
+    const currentYearMonth=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+    const chronological=[...unique].sort();
+    const initialMonth=chronological.filter(m=>m<=currentYearMonth).pop()||chronological[0];
+    sel.value=initialMonth;
+    await loadMonth(initialMonth);
   }catch(e){
     document.querySelector('#status').textContent='Availability could not be loaded.';
     console.error(e);
