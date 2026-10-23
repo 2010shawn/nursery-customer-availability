@@ -59,6 +59,7 @@ body.staffMode .availabilityGrid{--availability-cols:76px 128px minmax(205px,1.2
 .wishButton{min-height:42px;border:0;border-radius:10px;padding:9px 14px;font:inherit;font-weight:800;cursor:pointer;background:var(--awg-green);color:#fff}
 .wishButton.secondary{background:#eee9dc;color:var(--awg-green-dark);border:1px solid var(--awg-line)}
 .wishButton:disabled{opacity:.48;cursor:not-allowed}.empty{padding:30px;text-align:center;color:#657067}@media(max-width:650px){.tools{grid-template-columns:1fr}.availabilityGrid{--availability-cols:76px 128px 205px 100px repeat(4,148px);min-width:1100px}.stickyBrandBar{min-height:58px;padding:6px 12px}.stickyBrandBar img{height:43px;max-width:245px}.stickyBrandText{font-size:11px}.thumb{width:58px;height:46px}.noPhoto{width:58px}}
+.featuredShareButton{display:block;margin-top:5px;padding:4px 7px;border:1px solid #c7d6cb;border-radius:6px;background:#eef5ee;color:#27583b;font:inherit;font-size:10px;font-weight:700;cursor:pointer}.featuredShareButton:hover{background:#dcebdc}
 </style></head><body><div class="wrap"><section class="hero"><div class="eyebrow">Arizona Wholesale Growers</div><h1>Current Plant Availability</h1><div id="monthLabel" class="sub">Loading published availability…</div><p class="sub">Current plant availability across our growing facilities. Availability is subject to prior sale and confirmation. Please allow additional time for plants that need to be transferred between our growing facilities.</p></section>
 <div class="tools"><input id="search" placeholder="Search botanical or common name"><select id="plantType"><option value="">All Plants</option><option>Cactus/Succulents</option><option>Edibles</option><option>Perennials</option><option>Shrubs</option><option>Trees</option><option>Vines</option><option>Espalier</option><option>Palms</option></select><select id="size"><option value="">All sizes</option></select><select id="quality"><option value="">All Quality</option><option value="retail">Retail</option><option value="landscape">Landscape</option></select><select id="monthSelect" aria-label="Inventory month"></select></div>
 <div class="pricingBar">
@@ -67,7 +68,7 @@ body.staffMode .availabilityGrid{--availability-cols:76px 128px minmax(205px,1.2
     <button id="viewPricing" class="pricingButton" type="button">View My Pricing</button>
     <button id="hidePricing" class="pricingButton secondary" type="button" hidden>Hide Pricing</button>
   </div>
-  <div id="pricingStatus" class="pricingStatus">Enter your AWG customer code to view your assigned pricing.</div><div id="buildMarker" style="font-size:11px;color:#7a817b;margin-left:auto">Build: CURRENT-MONTH-2026-10-19-A</div>
+  <div id="pricingStatus" class="pricingStatus">Enter your AWG customer code to view your assigned pricing.</div><div id="buildMarker" style="font-size:11px;color:#7a817b;margin-left:auto">Build: FEATURED-LINKS-2026-10-23-A</div>
 </div>
 <div class="wishBar"><div id="wishBarText" class="wishBarText">Wish List: no plants selected</div><div class="wishActions"><button id="printAvailability" class="wishButton secondary" type="button">Print Availability</button><button id="clearWishList" class="wishButton secondary" type="button" disabled>Clear Wish List</button><button id="createWishPdf" class="wishButton" type="button" disabled>Create PDF Wish List</button></div></div><div id="status" class="status"></div><div class="availabilityShell">
       <div class="availabilityGrid">
@@ -95,7 +96,7 @@ body.staffMode .availabilityGrid{--availability-cols:76px 128px minmax(205px,1.2
 <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js"></script>
 <script>
 (async()=>{
-  const BUILD='CURRENT-MONTH-2026-10-19-A';
+  const BUILD='FEATURED-LINKS-2026-10-23-A';
   try{
     if('serviceWorker' in navigator){
       const regs=await navigator.serviceWorker.getRegistrations();
@@ -258,6 +259,42 @@ function groupListings(data){
   return [...map.values()].sort((a,b)=>a.botanical_name.localeCompare(b.botanical_name)||a.container_size.localeCompare(b.container_size));
 }
 function listingKey(v){return [v.botanical_name||'',v.common_name||'',v.container_size||''].join('||')}
+function featuredShareUrl(item){
+  const url=new URL(window.location.href);
+  url.search='';
+  url.hash='';
+  url.searchParams.set('month',currentMonth);
+  url.searchParams.set('plant',item.botanical_name);
+  url.searchParams.set('common',item.common_name);
+  url.searchParams.set('size',item.container_size);
+  return url.toString();
+}
+async function copyFeaturedLink(item,button){
+  const link=featuredShareUrl(item);
+  try{await navigator.clipboard.writeText(link)}catch(e){
+    const input=document.createElement('textarea');input.value=link;document.body.appendChild(input);input.select();document.execCommand('copy');input.remove();
+  }
+  const original=button.textContent;button.textContent='Copied!';
+  setTimeout(()=>{button.textContent=original},1800);
+}
+async function openSharedFeaturedLink(){
+  const p=new URLSearchParams(window.location.search);
+  const month=p.get('month'),bot=p.get('plant'),common=p.get('common'),size=p.get('size');
+  if(!month||!bot||!size||currentMonth!==month)return;
+  const item=groupListings(rows).find(v=>v.botanical_name===bot&&v.common_name===(common||'')&&v.container_size===size);
+  if(!item)return;
+  document.querySelector('#search').value=bot;
+  document.querySelector('#plantType').value='';
+  document.querySelector('#size').value='';
+  document.querySelector('#quality').value='';
+  render();
+  const photo=featuredPhotos.get(listingKey(item));
+  if(photo&&photo.individual_photo_path){
+    const url=await signed(photo.individual_photo_path);
+    if(url)openPhoto(url,(item.common_name||item.botanical_name)+' · '+item.container_size+' · Featured photo');
+  }
+}
+
 async function loadFeaturedPhotos(month){
   featuredPhotos=new Map();
   try{
@@ -569,6 +606,13 @@ async function render(){
       nameEl.addEventListener('blur',e=>{if(window.matchMedia('(hover:hover) and (pointer:fine)').matches)hideFeaturedPreview()});
       nameEl.addEventListener('click',e=>{e.preventDefault();showFeaturedPreview(nameEl,item)});
     }
+    if(featured&&featured.individual_photo_path){
+      const share=document.createElement('button');
+      share.type='button';share.className='featuredShareButton';share.textContent='Copy photo link';
+      share.title='Copy a permanent link to this featured plant photo';
+      share.addEventListener('click',()=>copyFeaturedLink(item,share));
+      plant.appendChild(share);
+    }
     const size=document.createElement('div');
     size.innerHTML=`<span class="size ${sizeClass(item.container_size)}">${esc(item.container_size)}</span>`;
     const price=document.createElement('div');price.className='priceCell';
@@ -713,7 +757,11 @@ async function load(){
     const chronological=[...unique].sort();
     const initialMonth=chronological.filter(m=>m<=currentYearMonth).pop()||chronological[0];
     sel.value=initialMonth;
-    await loadMonth(initialMonth);
+    const requested=new URLSearchParams(window.location.search).get('month');
+    const selectedMonth=requested&&unique.includes(requested)?requested:initialMonth;
+    sel.value=selectedMonth;
+    await loadMonth(selectedMonth);
+    await openSharedFeaturedLink();
   }catch(e){
     document.querySelector('#status').textContent='Availability could not be loaded.';
     console.error(e);
